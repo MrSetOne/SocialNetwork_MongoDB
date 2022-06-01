@@ -4,6 +4,6 @@ const router = express.Router();
 
 router.post('/', userController.create);
 router.get('/confirm/:authorization', userController.verify);
-router.put('/', userController.login)
+router.put('/login', userController.login)
 
 module.exports = router
