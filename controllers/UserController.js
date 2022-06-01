@@ -70,7 +70,7 @@ const userController = {
                 res.status(404).send('Email o contraseña incorrectos');
             };
             if (!loggedUser.confirmed) {
-                res.status(200).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
+                return res.status(200).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
             };
             const token = jwt.sign({ id: loggedUser._id }, jwt_secret);
             if (loggedUser.tokens.length > 4) {
@@ -82,6 +82,17 @@ const userController = {
         } catch (error) {
             error.origin = "user";
             next(error);
+        }
+    },
+    async logout(req, res, next) {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+                $pull: { tokens: req.headers.authorization },
+            }, { confirmed: true });
+            res.status(200).send(`Se ha cerrado la sesión.`)
+        } catch (error) {
+            console.error(error);
+            res.status(500).send({ message: 'Hubo un problema al cerrar sesión' })
         }
     }
 }

@@ -5,15 +5,15 @@ const User = require('../models/User');
 const authentication = async(req, res, next) => {
     try {
         const token = req.headers.authorization;
-        const payload = jwt.verify(token, jwt_secret);
-        const user = User.findOne({
+        const payload = await jwt.verify(token, jwt_secret);
+        const userFound = await User.findOne({
             _id: payload.id,
-            token
+            tokens: token
         });
-        if (!user) {
+        if (!userFound) {
             return res.status(400).send('No estas autorizado')
         };
-        req.user = user;
+        req.user = userFound;
         next();
     } catch (error) {
         console.error(error);
