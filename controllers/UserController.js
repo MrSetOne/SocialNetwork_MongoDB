@@ -30,7 +30,6 @@ const userController = {
                 res.status(400).send('Es necesario introducir una contraseña')
             }
         } catch (error) {
-            console.error(error)
             error.origin = "user";
             next(error);
         }
@@ -54,6 +53,36 @@ const userController = {
         }
 
 
+    },
+    async login(req, res, next) {
+        try {
+            if (!req.body.email || !req.body.password) {
+                res.send('Por favor introduce email y contraseña')
+            }
+            const loggedUser = await user.findOne({
+                email: req.body.email
+            });
+            if (!loggedUser) {
+                res.status(404).send('Email o contraseña incorrectos');
+            };
+            const isMatch = await bcrypt.compare(req.body.password, loggedUser.password)
+            if (!isMatch) {
+                res.status(404).send('Email o contraseña incorrectos');
+            };
+            if (!loggedUser.confirmed) {
+                res.status(200).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
+            };
+            const token = jwt.sign({ id: loggedUser._id }, jwt_secret);
+            if (loggedUser.tokens.length > 4) {
+                loggedUser.tokens.shift();
+            }
+            loggedUser.tokens.push(token);
+            await loggedUser.save();
+            res.status(201).send({ message: `¡Bienvenido ${loggedUser.username}!`, loggedUser })
+        } catch (error) {
+            error.origin = "user";
+            next(error);
+        }
     }
 }
 
