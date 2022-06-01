@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     password: String,
     img: String,
     confirmed: Boolean,
-    role: String
+    role: String,
+    tokens: []
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema); //Generamos el modelo como tal
