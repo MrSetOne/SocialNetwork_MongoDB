@@ -79,7 +79,7 @@ const userController = {
             }
             loggedUser.tokens.push(token);
             await loggedUser.save();
-            res.status(201).send({ message: `¡Bienvenido ${loggedUser.username}!`, loggedUser })
+            res.status(201).send({ message: `¡Bienvenido ${loggedUser.username}!`, loggedUser, token: token })
         } catch (error) {
             error.origin = "user";
             next(error);
@@ -124,7 +124,9 @@ const userController = {
     },
     async getAllUsers(req, res, next) {
         try {
-            const allUsers = await User.find().select("username img posts followers following likedPosts");
+            const allUsers = await User.find()
+                .select("username img postIds followers following likedPosts")
+                .populate('postIds')
             res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
         } catch (error) {
             res.send(error)

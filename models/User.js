@@ -21,9 +21,7 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     confirmed: Boolean,
     role: String,
     tokens: [],
-    posts: [
-        { postId: { type: ObjectId, ref: 'Post' } }
-    ],
+    postIds: [{ type: ObjectId, ref: 'Post' }],
     comments: [
         { commentId: { type: ObjectId, ref: 'Comment' } }
     ],
