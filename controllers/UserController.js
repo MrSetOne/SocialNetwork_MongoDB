@@ -154,6 +154,18 @@ const userController = {
             res.send(error)
         }
     },
+    async getByUsername(req, res) {
+        try {
+            if (req.params.username.length > 20) {
+                return res.status(400).send('Busqueda demasiado larga')
+            }
+            const search = new RegExp(req.params.username, "i");
+            const foundUser = await User.find({ username: search });
+            res.send(foundUser);
+        } catch (error) {
+            res.send(error)
+        }
+    }
 }
 
 module.exports = userController

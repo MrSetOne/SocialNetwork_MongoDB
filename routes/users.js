@@ -13,5 +13,6 @@ router.delete('/admin/:_id', authentication, isAdmin, userController.deleteByAdm
 router.get('/', authentication, userController.getAllUsers)
 router.get('/admin', authentication, isAdmin, userController.getAllUsersByAdmin);
 router.get('/session', authentication, userController.getSession);
-router.get('/id/:_id', authentication, userController.getById)
+router.get('/id/:_id', authentication, userController.getById);
+router.get('/user/:username', authentication, userController.getByUsername)
 module.exports = router
