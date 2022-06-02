@@ -130,6 +130,14 @@ const userController = {
         } catch (error) {
             res.send(error)
         }
+    },
+    async getAllUsersByAdmin(req, res) {
+        try {
+            const allUsers = await User.find()
+            res.status(200).send({ message: 'Para mi admin lo mejor, TQ Bro', allUsers })
+        } catch (error) {
+            res.send(error)
+        }
     }
 }
 
