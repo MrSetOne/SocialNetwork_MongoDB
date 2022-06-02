@@ -2,7 +2,6 @@ const TypeError = (error, req, res, next) => {
     if (error.errors) {
         error.feedback = []
         for (const fail in error.errors) {
-            console.log(error.errors[fail].path);
             error.feedback.push(error.errors[fail].path);
         };
         return res.status(400).send({
