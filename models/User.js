@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     likedPosts: [
         { postId: { type: ObjectId, ref: 'Post' } }
     ],
-    // TODO Faltan los likes en Comentarios
+    //TODO Faltan los likes en Comentarios
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema); //Generamos el modelo como tal

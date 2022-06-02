@@ -34,7 +34,6 @@ const userController = {
         } catch (error) {
             error.origin = "user";
             next(error);
-            // res.send(error)
         }
     },
     async verify(req, res) {
@@ -91,7 +90,7 @@ const userController = {
         try {
             const updatedUser = await User.findByIdAndUpdate(req.user._id, {
                 $pull: { tokens: req.headers.authorization },
-            }, { confirmed: true });
+            }, { new: true });
             res.status(200).send(`Se ha cerrado la sesión.`)
         } catch (error) {
             console.error(error);
@@ -99,7 +98,13 @@ const userController = {
         }
     },
     async updateUser(req, res, next) {
-        // const updatedUser = User.
+        try {
+            const { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
+            const updatedUser = await User.findByIdAndUpdate(req.user._id, data, { new: true })
+            res.send({ message: `Has modificado tu perfil`, updatedUser })
+        } catch (error) {
+            res.send(error)
+        }
     }
 }
 
