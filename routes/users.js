@@ -11,5 +11,7 @@ router.put('/modify', authentication, userController.updateUser);
 router.delete('/', authentication, userController.deleteByUser);
 router.delete('/admin/:_id', authentication, isAdmin, userController.deleteByAdmin)
 router.get('/', authentication, userController.getAllUsers)
-router.get('/admin', authentication, isAdmin, userController.getAllUsersByAdmin)
+router.get('/admin', authentication, isAdmin, userController.getAllUsersByAdmin);
+router.get('/session', authentication, userController.getSession);
+router.get('/id/:_id', authentication, userController.getById)
 module.exports = router

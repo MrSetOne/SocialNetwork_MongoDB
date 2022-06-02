@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const { jwt_secret } = require('../config/keys');
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
-const { isEmail } = require('validator');
 
 
 
@@ -138,7 +137,23 @@ const userController = {
         } catch (error) {
             res.send(error)
         }
-    }
+    },
+    async getSession(req, res) {
+        try {
+            let sessionUser = await User.findById(req.user._id);
+            res.status(200).send({ message: 'Tu sesión acual es:', currentToken: req.headers.authorization, sessionUser })
+        } catch (error) {
+
+        }
+    },
+    async getById(req, res) {
+        try {
+            const foundUser = await User.findById(req.params._id).select("username img posts followers following likedPosts")
+            res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
+        } catch (error) {
+            res.send(error)
+        }
+    },
 }
 
 module.exports = userController
