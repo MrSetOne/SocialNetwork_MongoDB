@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     posts: [
         { postId: { type: ObjectId, ref: 'Post' } }
     ],
+    comments: [
+        { commentId: { type: ObjectId, ref: 'Comment' } }
+    ],
     followers: [
         { userId: { type: ObjectId, ref: 'User' } }
     ],
