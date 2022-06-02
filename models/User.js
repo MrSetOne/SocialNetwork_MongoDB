@@ -19,16 +19,16 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     role: String,
     tokens: [],
     posts: [
-        { postId: { type: ObjectId, ref: Post } }
+        { postId: { type: ObjectId, ref: 'Post' } }
     ],
     followers: [
-        { userId: { type: ObjectId, ref: User } }
+        { userId: { type: ObjectId, ref: 'User' } }
     ],
     following: [
-        { userId: { type: ObjectId, ref: User } }
+        { userId: { type: ObjectId, ref: 'User' } }
     ],
     likedPosts: [
-        { postId: { type: ObjectId, ref: Post } }
+        { postId: { type: ObjectId, ref: 'Post' } }
     ],
     // TODO Faltan los likes en Comentarios
 }, { timestamps: true });

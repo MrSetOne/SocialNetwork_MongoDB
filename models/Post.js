@@ -4,7 +4,7 @@ const ObjectId = mongoose.SchemaTypes.ObjectId; //No traemos la propiedad de Obj
 const postSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a contener
 
     author: [
-        { userId: { type: ObjectId, ref: User } }
+        { userId: { type: ObjectId, ref: 'User' } }
     ],
 
     title: {
@@ -20,11 +20,11 @@ const postSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     img: String,
 
     likes: [
-        { userId: { type: ObjectId, ref: User } }
+        { userId: { type: ObjectId, ref: 'User' } }
     ],
 
     comments: [{
-        userId: { type: ObjectId, ref: User },
+        userId: { type: ObjectId, ref: 'User' },
         comment: String
     }]
 

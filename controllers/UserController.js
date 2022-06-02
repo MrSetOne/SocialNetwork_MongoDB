@@ -1,4 +1,3 @@
-const user = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { jwt_secret } = require('../config/keys');
@@ -12,7 +11,7 @@ const userController = {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
-                const newUser = await user.create(req.body)
+                const newUser = await User.create(req.body)
                 if (newUser) {
                     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     const url = "http://localhost:8080/users/confirm/" + initialToken;
@@ -49,7 +48,7 @@ const userController = {
                 res.send({ message: `El usuario ${user.username} se ha verificado`, updatedUser })
             }
         } catch (error) {
-
+            res.status(404).send('Algo ha fallado en la validacion')
         }
 
 
@@ -59,7 +58,7 @@ const userController = {
             if (!req.body.email || !req.body.password) {
                 res.send('Por favor introduce email y contraseña')
             }
-            const loggedUser = await user.findOne({
+            const loggedUser = await User.findOne({
                 email: req.body.email
             });
             if (!loggedUser) {
@@ -94,6 +93,9 @@ const userController = {
             console.error(error);
             res.status(500).send({ message: 'Hubo un problema al cerrar sesión' })
         }
+    },
+    async updateUser(req, res, next) {
+        // const updatedUser = User.
     }
 }
 
