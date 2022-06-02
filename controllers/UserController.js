@@ -88,7 +88,7 @@ const userController = {
     },
     async logout(req, res, next) {
         try {
-            const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+            await User.findByIdAndUpdate(req.user._id, {
                 $pull: { tokens: req.headers.authorization },
             }, { new: true });
             res.status(200).send(`Se ha cerrado la sesión.`)
@@ -105,6 +105,15 @@ const userController = {
         } catch (error) {
             res.send(error)
         }
+    },
+    async deleteByUser(req, res, next) {
+        try {
+            await User.findByIdAndDelete(req.user._id)
+            res.send('Usuario eliminado con exito')
+        } catch (error) {
+            res.send({ message: 'Algo ha fallado en el controlador', error })
+        }
+
     }
 }
 
