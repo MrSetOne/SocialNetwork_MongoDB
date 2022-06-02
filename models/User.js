@@ -36,6 +36,13 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     //TODO Faltan los likes en Comentarios
 }, { timestamps: true });
 
+userSchema.methods.toJSON = function() {
+    const user = this._doc;
+    delete user.tokens;
+    delete user.password;
+    return user;
+}
+
 const User = mongoose.model('User', userSchema); //Generamos el modelo como tal
 
 module.exports = User //Lo exportamos

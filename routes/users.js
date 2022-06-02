@@ -9,6 +9,7 @@ router.put('/login', userController.login);
 router.put('/logout', authentication, userController.logout);
 router.put('/modify', authentication, userController.updateUser);
 router.delete('/', authentication, userController.deleteByUser);
-router.delete('/admin/:id', authentication, isAdmin, userController.deleteByAdmin)
+router.delete('/admin/:_id', authentication, isAdmin, userController.deleteByAdmin)
+router.get('/', userController.getAllUsers)
 
 module.exports = router

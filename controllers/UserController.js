@@ -117,8 +117,16 @@ const userController = {
     },
     async deleteByAdmin(req, res, next) {
         try {
-            await User.findByIdAndDelete(req.params.id);
+            await User.findByIdAndDelete(req.params._id);
             res.send('Como admin eres el P*** amo, asi que te cargas a quien quieras rey ;)')
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async getAllUsers(req, res, next) {
+        try {
+            const allUsers = await User.find().select("username img posts followers following likedPosts");
+            res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
         } catch (error) {
             res.send(error)
         }
