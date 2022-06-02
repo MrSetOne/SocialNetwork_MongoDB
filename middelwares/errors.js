@@ -2,10 +2,10 @@ const TypeError = (error, req, res, next) => {
     if (error.errors) {
         error.feedback = []
         for (const fail in error.errors) {
-            error.feedback.push(error.errors[fail].path);
+            error.feedback.push({ path: error.errors[fail].path, message: error.errors[fail].message });
         };
         return res.status(400).send({
-            message: 'Faltan campos por rellenar',
+            message: 'Error en la validacion de los campos:',
             feedback: error.feedback
         });
     } else if (error.keyPattern) {

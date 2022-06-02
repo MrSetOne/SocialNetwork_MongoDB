@@ -1,5 +1,7 @@
 const mongoose = require('mongoose') //Nos traemos los metodos de mongoose
 const ObjectId = mongoose.SchemaTypes.ObjectId; //No traemos la propiedad de ObjectId para porder linkear
+const { isEmail } = require('validator');
+
 
 
 const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a contener
@@ -10,6 +12,7 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
     },
     email: {
         type: String,
+        validate: [isEmail, 'Introduce un correo valido'],
         required: [true, 'es necesario introducir un email'],
         unique: true
     },
