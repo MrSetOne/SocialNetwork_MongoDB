@@ -1,18 +1,19 @@
 const express = require('express');
-const userController = require('../controllers/UserController');
+const UserController = require('../controllers/UserController');
 const { authentication, isAdmin } = require('../middelwares/authentications');
 const router = express.Router();
 
-router.post('/', userController.create);
-router.get('/confirm/:authorization', userController.verify);
-router.put('/login', userController.login);
-router.put('/logout', authentication, userController.logout);
-router.put('/modify', authentication, userController.updateUser);
-router.delete('/', authentication, userController.deleteByUser);
-router.delete('/admin/:_id', authentication, isAdmin, userController.deleteByAdmin)
-router.get('/', authentication, userController.getAllUsers)
-router.get('/admin', authentication, isAdmin, userController.getAllUsersByAdmin);
-router.get('/session', authentication, userController.getSession);
-router.get('/id/:_id', authentication, userController.getById);
-router.get('/user/:username', authentication, userController.getByUsername)
+router.post('/', UserController.create);
+router.get('/confirm/:authorization', UserController.verify);
+router.put('/login', UserController.login);
+router.put('/logout', authentication, UserController.logout);
+router.put('/modify', authentication, UserController.updateUser);
+router.delete('/', authentication, UserController.deleteByUser);
+router.delete('/admin/:_id', authentication, isAdmin, UserController.deleteByAdmin)
+router.get('/', authentication, UserController.getAllUsers)
+router.get('/admin', authentication, isAdmin, UserController.getAllUsersByAdmin);
+router.get('/session', authentication, UserController.getSession);
+router.get('/id/:_id', authentication, UserController.getById);
+router.get('/user/:username', authentication, UserController.getByUsername);
+
 module.exports = router
