@@ -114,6 +114,14 @@ const userController = {
             res.send({ message: 'Algo ha fallado en el controlador', error })
         }
 
+    },
+    async deleteByAdmin(req, res, next) {
+        try {
+            await User.findByIdAndDelete(req.params.id);
+            res.send('Como admin eres el P*** amo, asi que te cargas a quien quieras rey ;)')
+        } catch (error) {
+            res.send(error)
+        }
     }
 }
 

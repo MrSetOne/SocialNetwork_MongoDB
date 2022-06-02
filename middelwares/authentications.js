@@ -24,4 +24,16 @@ const authentication = async(req, res, next) => {
     }
 };
 
-module.exports = { authentication }
+const isAdmin = async(req, res, next) => {
+    try {
+        if (req.user.role == 'admin') {
+            next();
+        } else {
+            return res.status(400).send('No tienes acceso a esta funcionalidad.')
+        }
+    } catch (error) {
+        res.send('Algo ha fallado en la verificacion de admin')
+    }
+}
+
+module.exports = { authentication, isAdmin }
