@@ -41,7 +41,11 @@ const postController = {
     },
     async getAll(req, res) {
         try {
-            const allPosts = await Post.find().populate('userId')
+            const { page = 1, limit = 10 } = req.query;
+            const allPosts = await Post.find()
+                .limit(limit * 1)
+                .skip((page - 1) * limit)
+                .populate('userId', ["username", "img"])
             res.send(allPosts)
         } catch (error) {
             res.send(error)
