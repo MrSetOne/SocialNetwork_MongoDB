@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = require('../config/keys');
+require("dotenv").config();
+const { jwt_secret } = process.env
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
 
@@ -124,9 +125,8 @@ const userController = {
     },
     async getAllUsers(req, res, next) {
         try {
-            const allUsers = await User.find()
-                .select("username img postIds followers following likedPosts")
-                .populate('postIds')
+            const allUsers = await User.find({}, { username: 1, postIds: 1 }) //TODO modificar para que funcione correcto
+                .populate('postIds', ["title"]) //TODO si lo pones normal te devuelve los que pides y si pones "-" te devuelve todos menos ese
             res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
         } catch (error) {
             res.send(error)

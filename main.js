@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
-const port = 8080;
+require("dotenv").config();
+const { PORT } = process.env;
 const { dbConnection } = require("./config/config");
 const { TypeError } = require("./middelwares/errors");
 
@@ -13,4 +14,4 @@ app.use('/posts', require('./routes/posts'));
 
 app.use(TypeError)
 
-app.listen(port, console.log(`Server started on port ${port}`));
+app.listen(PORT, console.log(`Server started on port ${PORT}`));

@@ -1,6 +1,8 @@
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = require('../config/keys');
+require("dotenv").config();
+const jwt_secret = process.env.JWT_SECRET
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 const authentication = async(req, res, next) => {
     try {
@@ -34,6 +36,20 @@ const isAdmin = async(req, res, next) => {
     } catch (error) {
         res.send('Algo ha fallado en la verificacion de admin')
     }
-}
+};
 
-module.exports = { authentication, isAdmin }
+const isAuthorPost = async(req, res, next) => {
+    try {
+        const post = await Post.findById(req.params._id);
+        if (post.userId.toString() !== req.user._id.toString()) {
+            return res.status(403).send({ message: 'No eres el autor de esta publicación.' });
+        }
+        next();
+    } catch (error) {
+        console.error(error)
+        return res.status(500).send({ error, message: 'Ha habido un problema al comprobar la autoría del pedido' })
+    }
+};
+
+
+module.exports = { authentication, isAdmin, isAuthorPost }

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose"); //Nos importamos mongoose para usarlo en la funcion dbConnection
 
-const { MONGO_URI } = require("./keys"); //Nos traemos MONGO_URI del archivo keys.js
+require("dotenv").config();
+const { MONGO_URI } = process.env
 
 const dbConnection = async() => {
     try {
