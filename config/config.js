@@ -7,10 +7,10 @@ const dbConnection = async() => {
     try {
         if (DB_TEST == 'true') {
             await mongoose.connect(MONGO_URI_TEST); //Metodo que se intenta conectar a la BBDD
-            console.log('Te has conectado al test');
+            console.log('Te has conectado a la DB de testing');
         } else {
             await mongoose.connect(MONGO_URI);
-            console.log('te as conectado al deploy');
+            console.log('Te has conectado a la DB del deploy');
         }
         console.log("BBDD conectada con éxito");
     } catch (error) {

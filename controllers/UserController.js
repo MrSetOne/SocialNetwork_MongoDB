@@ -1,6 +1,5 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-require("dotenv").config();
 const { jwt_secret } = process.env
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
