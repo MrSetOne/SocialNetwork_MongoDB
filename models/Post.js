@@ -17,13 +17,9 @@ const postSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
 
     img: String,
 
-    likes: [
-        { userId: { type: ObjectId, ref: 'User' } }
-    ],
+    likes: [{ type: ObjectId, ref: 'User' }],
 
-    comments: [{
-        commentId: { type: ObjectId, ref: 'Comment' },
-    }]
+    comments: [{ type: ObjectId, ref: 'Comment' }]
 
 }, { timestamps: true });
 

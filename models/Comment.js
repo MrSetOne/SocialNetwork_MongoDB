@@ -3,15 +3,13 @@ const ObjectId = mongoose.SchemaTypes.ObjectId; //No traemos la propiedad de Obj
 
 const commentSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a contener
 
-    author: [
-        { userId: { type: ObjectId, ref: 'User' } }
-    ],
+    postId: { type: ObjectId, ref: 'Post' },
+
+    author: { type: ObjectId, ref: 'User' },
 
     comment: String,
 
-    likes: [
-        { userId: { type: ObjectId, ref: 'User' } }
-    ],
+    likes: [{ type: ObjectId, ref: 'User' }],
 
 }, { timestamps: true });
 
