@@ -1,5 +1,6 @@
 const nodemailer = require('nodemailer');
-const { auth } = require('./keys');
+require("dotenv").config();
+const { EMAIL_USER, EMAIL_PASS } = process.env
 
 let transporter = nodemailer.createTransport({
     host: "smtp-mail.outlook.com",
@@ -8,7 +9,10 @@ let transporter = nodemailer.createTransport({
     tls: {
         ciphers: 'SSLv3'
     },
-    auth
+    auth: {
+        user: EMAIL_USER,
+        pass: EMAIL_PASS
+    }
 })
 
 
