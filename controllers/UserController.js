@@ -1,9 +1,10 @@
-const user = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = require('../config/keys');
+const { jwt_secret } = process.env
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
+
+
 
 const userController = {
     async create(req, res, next) {
@@ -12,7 +13,7 @@ const userController = {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
-                const newUser = await user.create(req.body)
+                const newUser = await User.create(req.body)
                 if (newUser) {
                     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     const url = "http://localhost:8080/users/confirm/" + initialToken;
@@ -21,13 +22,13 @@ const userController = {
                         to: newUser.email,
                         subject: "Confirma tu registro",
                         html: `<h2>¡Hola ${newUser.username}!</h2>
-                                    <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
-                                `
+                                        <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
+                                    `
                     })
                 }
                 res.status(201).send({ message: `Se ha creado el usuario ${req.body.username}`, newUser });
             } else {
-                res.status(400).send('Es necesario introducir una contraseña')
+                res.status(400).send(`Tu correo: ${req.body.email} no tiene un formato valido.`)
             }
         } catch (error) {
             error.origin = "user";
@@ -49,7 +50,7 @@ const userController = {
                 res.send({ message: `El usuario ${user.username} se ha verificado`, updatedUser })
             }
         } catch (error) {
-
+            res.status(404).send('Algo ha fallado en la validacion')
         }
 
 
@@ -59,7 +60,7 @@ const userController = {
             if (!req.body.email || !req.body.password) {
                 res.send('Por favor introduce email y contraseña')
             }
-            const loggedUser = await user.findOne({
+            const loggedUser = await User.findOne({
                 email: req.body.email
             });
             if (!loggedUser) {
@@ -78,7 +79,7 @@ const userController = {
             }
             loggedUser.tokens.push(token);
             await loggedUser.save();
-            res.status(201).send({ message: `¡Bienvenido ${loggedUser.username}!`, loggedUser })
+            res.status(201).send({ message: `¡Bienvenido ${loggedUser.username}!`, loggedUser, token: token })
         } catch (error) {
             error.origin = "user";
             next(error);
@@ -86,13 +87,84 @@ const userController = {
     },
     async logout(req, res, next) {
         try {
-            const updatedUser = await User.findByIdAndUpdate(req.user._id, {
+            await User.findByIdAndUpdate(req.user._id, {
                 $pull: { tokens: req.headers.authorization },
-            }, { confirmed: true });
+            }, { new: true });
             res.status(200).send(`Se ha cerrado la sesión.`)
         } catch (error) {
             console.error(error);
             res.status(500).send({ message: 'Hubo un problema al cerrar sesión' })
+        }
+    },
+    async updateUser(req, res, next) {
+        try {
+            const { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
+            const updatedUser = await User.findByIdAndUpdate(req.user._id, data, { new: true })
+            res.send({ message: `Has modificado tu perfil`, updatedUser })
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async deleteByUser(req, res, next) {
+        try {
+            await User.findByIdAndDelete(req.user._id)
+            res.send('Usuario eliminado con exito')
+        } catch (error) {
+            res.send({ message: 'Algo ha fallado en el controlador', error })
+        }
+
+    },
+    async deleteByAdmin(req, res, next) {
+        try {
+            await User.findByIdAndDelete(req.params._id);
+            res.send('Como admin eres el P*** amo, asi que te cargas a quien quieras rey ;)')
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async getAllUsers(req, res, next) {
+        try {
+            const allUsers = await User.find({}, { username: 1, postIds: 1 }) //TODO modificar para que funcione correcto
+                .populate('postIds', ["title"]) //TODO si lo pones normal te devuelve los que pides y si pones "-" te devuelve todos menos ese
+            res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async getAllUsersByAdmin(req, res) {
+        try {
+            const allUsers = await User.find()
+            res.status(200).send({ message: 'Para mi admin lo mejor, TQ Bro', allUsers })
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async getSession(req, res) {
+        try {
+            let sessionUser = await User.findById(req.user._id);
+            res.status(200).send({ message: 'Tu sesión acual es:', currentToken: req.headers.authorization, sessionUser })
+        } catch (error) {
+
+        }
+    },
+    async getById(req, res) {
+        try {
+            const foundUser = await User.findById(req.params._id).select("username img posts followers following likedPosts")
+            res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async getByUsername(req, res) {
+        try {
+            if (req.params.username.length > 20) {
+                return res.status(400).send('Busqueda demasiado larga')
+            }
+            const search = new RegExp(req.params.username, "i");
+            const foundUser = await User.find({ username: search });
+            res.send(foundUser);
+        } catch (error) {
+            res.send(error)
         }
     }
 }
