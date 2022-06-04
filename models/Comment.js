@@ -7,7 +7,10 @@ const commentSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a
 
     author: { type: ObjectId, ref: 'User' },
 
-    comment: String,
+    comment: {
+        type: String,
+        required: [true, 'Es necesario introducir un comentario'],
+    },
 
     likes: [{ type: ObjectId, ref: 'User' }],
 
