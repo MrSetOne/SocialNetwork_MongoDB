@@ -1,4 +1,5 @@
 const express = require('express');
+const userController = require('../controllers/UserController');
 const UserController = require('../controllers/UserController');
 const { authentication, isAdmin } = require('../middelwares/authentications');
 const router = express.Router();
@@ -15,5 +16,8 @@ router.get('/admin', authentication, isAdmin, UserController.getAllUsersByAdmin)
 router.get('/session', authentication, UserController.getSession);
 router.get('/id/:_id', authentication, UserController.getById);
 router.get('/user/:username', authentication, UserController.getByUsername);
+router.put('/follow/:_id', authentication, userController.follow);
+router.put('/unfollow/:_id', authentication, userController.unfollow)
+
 
 module.exports = router

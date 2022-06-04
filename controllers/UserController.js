@@ -166,7 +166,34 @@ const userController = {
         } catch (error) {
             res.send(error)
         }
-    }
+    },
+    async follow(req, res) {
+        try {
+            const toFollow = await User.findByIdAndUpdate(req.params._id, { $push: { followers: req.user._id } }, { new: true })
+            if (!toFollow) {
+                res.send(`El usuario con id ${req.params._id} no existe`)
+            } else {
+                const follower = await User.findByIdAndUpdate(req.user._id, { $push: { following: req.params._id } }, { new: true })
+                res.send(`El usuario ${follower.username} ahora sigue a ${toFollow.username}`)
+            }
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async unfollow(req, res) {
+        try {
+            const toUnfollow = await User.findByIdAndUpdate(req.params._id, { $pull: { followers: req.user._id } }, { new: true })
+            if (!toUnfollow) {
+                res.send(`El usuario con id ${req.params._id} no existe`)
+            } else {
+                const unfollower = await User.findByIdAndUpdate(req.user._id, { $pull: { following: req.params._id } }, { new: true })
+                res.send(`El usuario ${unfollower.username} ha dejado de seguir a ${toUnfollow.username}`)
+            }
+        } catch (error) {
+            res.send(error)
+        }
+    },
+
 }
 
 module.exports = userController
