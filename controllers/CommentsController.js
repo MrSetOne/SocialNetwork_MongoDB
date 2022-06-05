@@ -48,7 +48,32 @@ const commentsController = {
             res.send(error)
         }
     },
-
+    async like(req, res) {
+        try {
+            const toLike = await Comment.findById(req.params._id)
+            if (toLike.likes.includes(req.user._id)) {
+                res.send('Ya has dado like previamente a este comentario')
+            } else {
+                await Comment.findByIdAndUpdate(req.params._id, { $push: { likes: req.user._id } })
+                res.send(`Has dado me gusta al comentario ${req.params._id}`)
+            }
+        } catch (error) {
+            res.send({ message: `No exite el comentario con id ${req.params._id}`, error })
+        }
+    },
+    async unlike(req, res) {
+        try {
+            const target = await Comment.findById(req.params._id);
+            if (!target.likes.includes(req.user._id)) {
+                res.send(`No le has dado like al comentario con id ${req.params._id}`)
+            } else {
+                await Comment.findByIdAndUpdate(req.params._id, { $pull: { likes: req.user._id } })
+                res.send(`Has quitado el me gusta al comentario ${req.params._id}`)
+            }
+        } catch (error) {
+            res.send({ message: `No exite el comentario con id ${req.params._id}`, error })
+        }
+    }
 }
 
 module.exports = commentsController

@@ -36,8 +36,6 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
 
     likedPosts: [{ type: ObjectId, ref: 'Post' }],
 
-    //TODO Faltan los likes en Comentarios
-
 }, { timestamps: true });
 
 userSchema.methods.toJSON = function() {
