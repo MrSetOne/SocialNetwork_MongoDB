@@ -18,6 +18,8 @@ const TypeError = (error, req, res, next) => {
             failedValue
         });
 
+    } else if (error.kind == "ObjectId") {
+        return res.send(`El id ${error.value} no existe`)
     } else {
         return res.status(500).send({ message: `Algo ha fallado en el controlador de ${error.origin}`, error });
     }

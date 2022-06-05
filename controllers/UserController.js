@@ -1,4 +1,5 @@
 const bcrypt = require('bcryptjs');
+const { all } = require('express/lib/application');
 const jwt = require('jsonwebtoken');
 const { jwt_secret } = process.env
 const transporter = require('../config/nodemailer');
@@ -124,7 +125,7 @@ const userController = {
     },
     async getAllUsers(req, res, next) {
         try {
-            const allUsers = await User.find({}, { username: 1, postIds: 1 }) //TODO modificar para que funcione correcto
+            const allUsers = await User.find({}, { username: 1, postIds: 1 })
                 .populate('postIds', ["title"]) //TODO si lo pones normal te devuelve los que pides y si pones "-" te devuelve todos menos ese
             res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
         } catch (error) {
@@ -133,7 +134,7 @@ const userController = {
     },
     async getAllUsersByAdmin(req, res) {
         try {
-            const allUsers = await User.find()
+            const allUsers = await User.find().populate(["postIds", "comments", "followers", "following", "likedPosts"])
             res.status(200).send({ message: 'Para mi admin lo mejor, TQ Bro', allUsers })
         } catch (error) {
             res.send(error)
@@ -141,10 +142,13 @@ const userController = {
     },
     async getSession(req, res) {
         try {
-            let sessionUser = await User.findById(req.user._id);
+            let sessionUser = await User.findById(req.user._id, { username: 1, postIds: 1, followers: 1, following: 1 })
+                .populate("postIds", ["-userId"])
+                .populate("followers", ["username"])
+                .populate("following", ["username"])
             res.status(200).send({ message: 'Tu sesión acual es:', currentToken: req.headers.authorization, sessionUser })
         } catch (error) {
-
+            res.send({ error })
         }
     },
     async getById(req, res) {
@@ -193,6 +197,14 @@ const userController = {
             }
         } catch (error) {
             res.send({ message: `El usuario con id ${req.params._id} no existe`, error })
+        }
+    },
+    async doAnAdmin(req, res, next) {
+        try {
+            const newAdmin = await User.findByIdAndUpdate(req.params._id, { role: "admin" }, { new: true });
+            res.status(200).send(`Ahora el usuario ${newAdmin.username} es ${newAdmin.role}`)
+        } catch (error) {
+            next(error)
         }
     }
 }

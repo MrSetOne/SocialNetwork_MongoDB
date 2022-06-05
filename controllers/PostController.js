@@ -45,7 +45,7 @@ const postController = {
             const allPosts = await Post.find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
-                .populate('userId', ["username", "img"])
+                .populate(["userId", "comments"])
             res.send(allPosts)
         } catch (error) {
             res.send(error)
@@ -71,7 +71,7 @@ const postController = {
             res.send(error)
         }
     },
-    async like(req, res) {
+    async like(req, res, next) {
         try {
             const toLike = await Post.findById(req.params._id)
             if (toLike.likes.includes(req.user._id)) {
@@ -82,7 +82,8 @@ const postController = {
                 res.send(`Has dado me gusta al post ${req.params._id}`)
             }
         } catch (error) {
-            res.send(error)
+            error.origin = "post"
+            next(error)
         }
     },
     async unlike(req, res) {
