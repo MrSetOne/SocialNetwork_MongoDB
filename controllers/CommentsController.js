@@ -8,16 +8,20 @@ const User = require('../models/User')
 const commentsController = {
     async create(req, res, next) {
         try {
-            const newComment = await Comment.create({
-                comment: req.body.comment,
-                author: req.user._id,
-                postId: req.params._id
-            })
-            await User.findByIdAndUpdate(req.user._id, { $push: { comments: newComment._id } });
-            await Post.findByIdAndUpdate(req.params._id, { $push: { comments: newComment._id } })
-            res.status(201).send({ message: 'Se ha añadido un nuevo comentario:', newComment })
+            if (req.body.comment) {
+                const newComment = await Comment.create({
+                    comment: req.body.comment,
+                    author: req.user._id,
+                    postId: req.params._id
+                })
+                await User.findByIdAndUpdate(req.user._id, { $push: { comments: newComment._id } });
+                await Post.findByIdAndUpdate(req.params._id, { $push: { comments: newComment._id } })
+                res.status(201).send({ message: 'Se ha añadido un nuevo comentario:', newComment })
+            } else {
+                res.send('Es necesario introducir un comentario')
+            }
         } catch (error) {
-            console.log(error);
+            error.origin = "comments"
             next()
         }
     },
