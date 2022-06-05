@@ -2,9 +2,10 @@ const express = require('express');
 const userController = require('../controllers/UserController');
 const UserController = require('../controllers/UserController');
 const { authentication, isAdmin } = require('../middelwares/authentications');
+const { imgSourcePorfile } = require('../middelwares/imgsource');
 const router = express.Router();
 
-router.post('/', UserController.create);
+router.post('/', imgSourcePorfile.single('img'), UserController.create);
 router.get('/confirm/:authorization', UserController.verify);
 router.put('/login', UserController.login);
 router.put('/logout', authentication, UserController.logout);

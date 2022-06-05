@@ -10,11 +10,12 @@ const User = require('../models/User');
 const userController = {
     async create(req, res, next) {
         try {
+            console.log(req.body);
             if (req.body.password) {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
-                const newUser = await User.create(req.body)
+                const newUser = await User.create({...req.body, img: req.file.filename })
                 if (newUser) {
                     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     const url = "http://localhost:8080/users/confirm/" + initialToken;
