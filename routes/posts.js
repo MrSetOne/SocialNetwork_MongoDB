@@ -1,12 +1,13 @@
 const express = require('express');
 const PostController = require('../controllers/PostController');
 const { authentication, isAdmin, isAuthorPost } = require('../middelwares/authentications');
+const { deleterPost } = require('../middelwares/deleters');
 const router = express.Router();
 
 router.post('/', authentication, PostController.create);
 router.put('/id/:_id', authentication, isAuthorPost, PostController.update);
-router.delete('/id/:_id', authentication, isAuthorPost, PostController.deleteByUser);
-router.delete('/admin/id/:_id', authentication, isAdmin, PostController.deleteByAdmin);
+router.delete('/id/:_id', authentication, isAuthorPost, deleterPost, PostController.delete);
+router.delete('/admin/id/:_id', authentication, isAdmin, deleterPost, PostController.delete);
 router.get('/', authentication, PostController.getAll);
 router.get('/title/:title', authentication, PostController.getByTitle);
 router.get('/id/:_id', authentication, PostController.getById);

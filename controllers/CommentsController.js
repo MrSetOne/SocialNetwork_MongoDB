@@ -36,18 +36,10 @@ const commentsController = {
             res.send(error)
         }
     },
-    async deleteByUser(req, res) {
+    async delete(req, res) {
         try {
             await Comment.findByIdAndDelete(req.params._id)
             res.send('Comentario eliminado con exito')
-        } catch (error) {
-            res.send(error)
-        }
-    },
-    async deleteByAdmin(req, res) {
-        try {
-            await Comment.findByIdAndDelete(req.params._id);
-            res.send('Como admin has fulminado el comentario, tvto Amo');
         } catch (error) {
             res.send(error)
         }
