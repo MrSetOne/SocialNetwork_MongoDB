@@ -70,6 +70,34 @@ const postController = {
         } catch (error) {
             res.send(error)
         }
+    },
+    async like(req, res) {
+        try {
+            const toLike = await Post.findById(req.params._id)
+            if (toLike.likes.includes(req.user._id)) {
+                res.send('Ya has dado like previamente a esta publicacion')
+            } else {
+                await Post.findByIdAndUpdate(req.params._id, { $push: { likes: req.user._id } })
+                await User.findByIdAndUpdate(req.user._id, { $push: { likedPosts: req.params._id } })
+                res.send(`Has dado me gusta al post ${req.params._id}`)
+            }
+        } catch (error) {
+            res.send(error)
+        }
+    },
+    async unlike(req, res) {
+        try {
+            const target = await Post.findById(req.params._id);
+            if (!target.likes.includes(req.user._id)) {
+                res.send(`No le has dado like a la publicacion con id ${req.params._id}`)
+            } else {
+                await Post.findByIdAndUpdate(req.params._id, { $pull: { likes: req.user._id } })
+                await User.findByIdAndUpdate(req.user._id, { $pull: { likedPosts: req.params._id } })
+                res.send(`Has quitado el me gusta al post ${req.params._id}`)
+            }
+        } catch (error) {
+            res.send(error)
+        }
     }
 }
 
