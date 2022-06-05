@@ -170,38 +170,31 @@ const userController = {
     async follow(req, res) {
         try {
             const toFollow = await User.findById(req.params._id)
-            console.log(toFollow);
-            console.log(toFollow.followers.includes(req.user._id));
-            if (!toFollow) {
-                console.log('No existe el tofollow');
-                res.send(`No existe ningun usuario con id ${req.params._id}`)
-            } else if (toFollow.followers.includes(req.user._id)) {
-                console.log('¿Ya lo sigo?');
+            if (toFollow.followers.includes(req.user._id)) {
                 res.send('Ya sigues a este usuario')
             } else {
-                console.log('Entra en veredicto');
                 await User.findByIdAndUpdate(req.params._id, { $push: { followers: req.user._id } }, { new: true })
                 const follower = await User.findByIdAndUpdate(req.user._id, { $push: { following: req.params._id } }, { new: true })
                 res.send(`El usuario ${follower.username} ahora sigue a ${toFollow.username}`)
             }
         } catch (error) {
-            res.send(error)
+            res.send({ message: `El usuario con id ${req.params._id} no existe`, error })
         }
     },
     async unfollow(req, res) {
         try {
-            const toUnfollow = await User.findByIdAndUpdate(req.params._id, { $pull: { followers: req.user._id } }, { new: true })
-            if (!toUnfollow) {
-                res.send(`El usuario con id ${req.params._id} no existe`)
-            } else {
+            const target = await User.findById(req.params._id);
+            if (target.followers.includes(req.user._id)) {
+                const toUnfollow = await User.findByIdAndUpdate(req.params._id, { $pull: { followers: req.user._id } }, { new: true })
                 const unfollower = await User.findByIdAndUpdate(req.user._id, { $pull: { following: req.params._id } }, { new: true })
                 res.send(`El usuario ${unfollower.username} ha dejado de seguir a ${toUnfollow.username}`)
+            } else {
+                res.send(`No sigues al usuario con id ${req.params._id}`)
             }
         } catch (error) {
-            res.send(error)
+            res.send({ message: `El usuario con id ${req.params._id} no existe`, error })
         }
-    },
-
+    }
 }
 
 module.exports = userController
