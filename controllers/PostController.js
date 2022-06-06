@@ -23,18 +23,10 @@ const postController = {
             res.send(error)
         }
     },
-    async deleteByUser(req, res) {
+    async delete(req, res) {
         try {
             await Post.findByIdAndDelete(req.params._id)
             res.send('Post eliminado con exito')
-        } catch (error) {
-            res.send(error)
-        }
-    },
-    async deleteByAdmin(req, res) {
-        try {
-            await Post.findByIdAndDelete(req.params._id);
-            res.send('Como admin has fulminado el post, tvto Amo');
         } catch (error) {
             res.send(error)
         }

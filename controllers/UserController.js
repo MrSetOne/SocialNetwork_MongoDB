@@ -10,23 +10,24 @@ const User = require('../models/User');
 const userController = {
     async create(req, res, next) {
         try {
+            console.log(req.body);
             if (req.body.password) {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
                 const newUser = await User.create(req.body)
-                if (newUser) {
-                    const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
-                    const url = "http://localhost:8080/users/confirm/" + initialToken;
-                    await transporter.sendMail({
-                        from: "lara.sanchez.michael.dev@outlook.es",
-                        to: newUser.email,
-                        subject: "Confirma tu registro",
-                        html: `<h2>¡Hola ${newUser.username}!</h2>
-                                        <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
-                                    `
-                    })
-                }
+                    // if (newUser) {
+                    //     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
+                    //     const url = "http://localhost:8080/users/confirm/" + initialToken;
+                    //     await transporter.sendMail({
+                    //         from: "lara.sanchez.michael.dev@outlook.es",
+                    //         to: newUser.email,
+                    //         subject: "Confirma tu registro",
+                    //         html: `<h2>¡Hola ${newUser.username}!</h2>
+                    //                         <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
+                    //                     `
+                    //     })
+                    // }
                 res.status(201).send({ message: `Se ha creado el usuario ${req.body.username}`, newUser });
             } else {
                 res.status(400).send(`Tu correo: ${req.body.email} no tiene un formato valido.`)
@@ -106,22 +107,14 @@ const userController = {
             res.send(error)
         }
     },
-    async deleteByUser(req, res, next) {
+    async delete(req, res, next) {
         try {
-            await User.findByIdAndDelete(req.user._id)
+            await User.findByIdAndDelete(req.params._id)
             res.send('Usuario eliminado con exito')
         } catch (error) {
             res.send({ message: 'Algo ha fallado en el controlador', error })
         }
 
-    },
-    async deleteByAdmin(req, res, next) {
-        try {
-            await User.findByIdAndDelete(req.params._id);
-            res.send('Como admin eres el P*** amo, asi que te cargas a quien quieras rey ;)')
-        } catch (error) {
-            res.send(error)
-        }
     },
     async getAllUsers(req, res, next) {
         try {

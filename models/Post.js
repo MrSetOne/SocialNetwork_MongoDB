@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
 
     body: {
         type: String,
-        required: [true, 'es necesario introducir un email'],
+        required: [true, 'es necesario introducir un cuerpo'],
     },
 
     img: String,
