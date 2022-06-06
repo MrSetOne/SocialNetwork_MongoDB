@@ -5,10 +5,10 @@ const storagePorfile = multer.diskStorage({
         cb(null, './assets/porfile');
     },
     filename: function(req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname)
+        cb(null, Date.now() + '-' + file.originalname);
     }
 })
-const imgSourcePorfile = multer({ storagePorfile });
+const imgSourcePorfile = multer({ storage: storagePorfile });
 
 
 
@@ -21,7 +21,7 @@ const storagePost = multer.diskStorage({
         cb(null, Date.now() + '-' + file.originalname)
     }
 })
-const imgSourcePost = multer({ storagePost });
+const imgSourcePost = multer({ storage: storagePost });
 
 
 

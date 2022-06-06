@@ -9,7 +9,7 @@ router.post('/', imgSourcePorfile.single('img'), UserController.create);
 router.get('/confirm/:authorization', UserController.verify);
 router.put('/login', UserController.login);
 router.put('/logout', authentication, UserController.logout);
-router.put('/modify', authentication, UserController.updateUser);
+router.put('/modify', authentication, imgSourcePorfile.single('img'), UserController.updateUser);
 router.delete('/', authentication, UserController.deleteByUser);
 router.delete('/admin/:_id', authentication, isAdmin, UserController.deleteByAdmin)
 router.get('/', authentication, UserController.getAllUsers)
