@@ -6,13 +6,13 @@ const deleterPost = async(req, res, next) => {
     try {
         const target = await Post.findById(req.params._id);
         if (target.likes) {
-            await target.likes.forEach(item => {
-                User.findByIdAndUpdate(item, { $pull: { likedPosts: req.params._id } }, { new: true });
+            target.likes.forEach(async(item) => {
+                await User.findByIdAndUpdate(item, { $pull: { likedPosts: req.params._id } });
             });
         };
         if (target.comments) {
             target.comments.forEach(async(comment) => {
-                const toDelete = await Comment.findById(comment.toString());
+                const toDelete = await Comment.findById(comment);
                 await User.findByIdAndUpdate(toDelete.author, { $pull: { comments: comment } })
                 await Comment.findByIdAndDelete(comment);
             })
