@@ -65,5 +65,17 @@ const isAuthorComment = async(req, res, next) => {
     }
 };
 
+const itsMe = async(req, res, next) => {
+    try {
+        const user = User.findById(req.params._id);
+        if (!(req.params._id == req.user._id)) {
+            return res.send("No estas autorizado")
+        }
+        next()
+    } catch (error) {
+        res.send(error)
+    }
+}
 
-module.exports = { authentication, isAdmin, isAuthorPost, isAuthorComment }
+
+module.exports = { authentication, isAdmin, isAuthorPost, isAuthorComment, itsMe }

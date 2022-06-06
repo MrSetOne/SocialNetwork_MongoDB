@@ -26,7 +26,7 @@ const deleterPost = async(req, res, next) => {
 
 const deleterUser = async(req, res, next) => {
     try {
-        const target = await User.findById(req.params._id);
+        let target = await User.findById(req.params._id);
         if (target.postIds) {
             target.postIds.forEach(async(post) => {
                 const targetPost = await Post.findById(post);
@@ -42,6 +42,8 @@ const deleterUser = async(req, res, next) => {
                         await Comment.findByIdAndDelete(comment);
                     })
                 }
+                await User.findByIdAndUpdate(req.params._id, { $pull: { postIds: post } })
+                await Post.findByIdAndDelete(post)
             })
         };
         target = await User.findById(req.params._id);
@@ -72,7 +74,7 @@ const deleterUser = async(req, res, next) => {
         }
         next()
     } catch (error) {
-        res.send(error)
+        res.send({ msg: 'Error en el middelware de borrado', error })
     }
 }
 
