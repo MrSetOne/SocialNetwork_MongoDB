@@ -7,7 +7,7 @@ const User = require("../models/User")
 const postController = {
     async create(req, res, next) {
         try {
-            const newPost = await Post.create({...req.body, userId: req.user._id })
+            const newPost = await Post.create({...req.body, userId: req.user._id, img: req.file.filename })
             await User.findByIdAndUpdate(req.user._id, { $push: { postIds: newPost._id } })
             res.status(201).send({ message: 'Se ha generado un nuevo post:', newPost })
         } catch (error) {
@@ -17,7 +17,7 @@ const postController = {
     async update(req, res) {
         try {
             const { userId, likes, comments, ...data } = req.body;
-            const updatedPost = await Post.findByIdAndUpdate(req.params._id, data, { new: true })
+            const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: req.file.filename }, { new: true })
             res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
         } catch (error) {
             res.send(error)

@@ -15,7 +15,7 @@ const userController = {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
-                const newUser = await User.create(req.body)
+                const newUser = await User.create({...req.body, img: req.file.filename })
                     // if (newUser) {
                     //     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     //     const url = "http://localhost:8080/users/confirm/" + initialToken;
@@ -34,6 +34,7 @@ const userController = {
             }
         } catch (error) {
             error.origin = "user";
+            console.log(error);
             next(error);
         }
     },
@@ -101,7 +102,7 @@ const userController = {
     async updateUser(req, res, next) {
         try {
             const { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
-            const updatedUser = await User.findByIdAndUpdate(req.user._id, data, { new: true })
+            const updatedUser = await User.findByIdAndUpdate(req.user._id, {...data, img: req.file.filename }, { new: true })
             res.send({ message: `Has modificado tu perfil`, updatedUser })
         } catch (error) {
             res.send(error)
