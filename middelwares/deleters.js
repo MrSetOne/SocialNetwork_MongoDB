@@ -70,9 +70,10 @@ const deleterUser = async(req, res, next) => {
                 await Post.findByIdAndUpdate(like, { $pull: { likes: target._id } })
             })
         }
+        next()
     } catch (error) {
         res.send(error)
     }
 }
 
-module.exports = { deleterPost }
+module.exports = { deleterPost, deleterUser }
