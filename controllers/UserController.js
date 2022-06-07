@@ -10,7 +10,6 @@ const User = require('../models/User');
 const userController = {
     async create(req, res, next) {
         try {
-            console.log(req.body);
             if (req.body.password) {
                 req.body.role = "user";
                 req.body.confirmed = false;
