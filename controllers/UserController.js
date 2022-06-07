@@ -171,6 +171,9 @@ const userController = {
     },
     async follow(req, res) {
         try {
+            if (req.params._id == req.user._id) {
+                return res.send(`No te puedes seguir a ti mismo`)
+            }
             const toFollow = await User.findById(req.params._id)
             if (toFollow.followers.includes(req.user._id)) {
                 res.send('Ya sigues a este usuario')
@@ -185,6 +188,9 @@ const userController = {
     },
     async unfollow(req, res) {
         try {
+            if (req.params._id == req.user._id) {
+                return res.send(`No te puedes dejar de seguir a ti mismo`)
+            }
             const target = await User.findById(req.params._id);
             if (target.followers.includes(req.user._id)) {
                 const toUnfollow = await User.findByIdAndUpdate(req.params._id, { $pull: { followers: req.user._id } }, { new: true })

@@ -75,5 +75,7 @@ Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge]
 | GET | localhost:YourPort/users/admin | Admin | :x: | :x: | Obtener toda la informacion de usuarios | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#f090dd4f-9f3c-4a8e-8537-15ab80c9b182) |
 | GET | localhost:YourPort/users/session | User | :x: | :x: | Obtener informacion de sesión | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#bae41500-81c3-401a-8971-9bb1d9b84b7f) |
 | GET | localhost:YourPort/users/id/:_id | User | :heavy_check_mark: | :x: | Obtener informacion por id de usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#02a294de-53bc-4955-83cf-2f2d78a35d7b) |
-| GET | localhost:8080/users/user/:username | User | :heavy_check_mark: | :x: | Buscar usuario por nombre | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#2d0a2dfe-d847-442e-8621-749276487807) |
-
+| GET | localhost:YourPort/users/user/:username | User | :heavy_check_mark: | :x: | Buscar usuario por nombre | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#2d0a2dfe-d847-442e-8621-749276487807) |
+| PUT | localhost:YourPort/users/follow/:_id | User | :heavy_check_mark: | :x: | Dar Follow a usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#be2da517-7e16-4823-8f78-41bcab350271) |
+| PUT | localhost:YourPort/users/unfollow/:_id | User | :heavy_check_mark: | :x: | Dar Unfollow a usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#c8f22416-84fb-4093-9f95-b63ea6b1d1e6) |
+| PUT | localhost:YourPort/users/admin/:_id | Admin | :heavy_check_mark: | :x: | Hacer a un usuario Admin | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#228a21b4-ee37-44cb-8e92-14b2d613eb16) |
