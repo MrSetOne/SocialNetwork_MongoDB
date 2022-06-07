@@ -103,6 +103,8 @@ Por falta de tiempo la documentacion ha sido realizada con Postman, aunque lo co
 | POST | localhost:YourPort/comments/id/:_id | User | :heavy_check_mark: | :heavy_check_mark: | Crear un comentario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#39aa3b81-b086-4669-9e00-bbe6c5950d15) |
 | PUT | localhost:YourPort/comments/id/:_id | Author | :heavy_check_mark: | :heavy_check_mark: | Modificar un comentario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#149be17a-4e4e-4485-ba1e-444d9dea254f) |
 | DELETE | localhost:YourPort/comments/id/:_id | Author | :heavy_check_mark: | :x: | Autor elimima comentario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#a26e7b22-e115-4c69-b38b-29cea39531fc) |
-
+| DELETE | localhost:YourPort/comments/admin/id/:_id | Admin | :heavy_check_mark: | :x: | Admin elimina comentario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#0aebb9aa-606c-4414-89f8-d9219f7c6d61) |
+| PUT | localhost:YourPort/comments/like/id/:_id | User | :heavy_check_mark: | :x: | Añadir like | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#9b4a7755-ef3c-4d31-a3c5-e17f515082b1) |
+| PUT | localhost:YourPort/comments/unlike/id/:_id | User | :heavy_check_mark: | :x: | Quitar like | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#d5d6e8aa-50c4-4ce0-92e5-4183291d4990) |
 
 
