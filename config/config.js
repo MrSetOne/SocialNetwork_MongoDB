@@ -1,4 +1,4 @@
-const mongoose = require("mongoose"); //Nos importamos mongoose para usarlo en la funcion dbConnection
+const mongoose = require("mongoose");
 
 require("dotenv").config();
 const { MONGO_URI_TEST, MONGO_URI, DB_TEST } = process.env
@@ -6,7 +6,7 @@ const { MONGO_URI_TEST, MONGO_URI, DB_TEST } = process.env
 const dbConnection = async() => {
     try {
         if (DB_TEST == 'true') {
-            await mongoose.connect(MONGO_URI_TEST); //Metodo que se intenta conectar a la BBDD
+            await mongoose.connect(MONGO_URI_TEST);
             console.log('Te has conectado a la DB de testing');
         } else {
             await mongoose.connect(MONGO_URI);
@@ -20,5 +20,5 @@ const dbConnection = async() => {
 };
 
 module.exports = {
-    dbConnection, //Exportamos la funcion dbConnection
+    dbConnection,
 };

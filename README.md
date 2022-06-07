@@ -4,35 +4,29 @@
 
     * Tecnologías utilizadas 
 
-    * Instalación y despliegue XXXXXXXXXXXXXXXXXXXXXX
+    * Instalación y despliegue 
 
-    * Origen XXXXXXXXXXXXXXXXXXX
+    * Origen 
 
-    * Objetivos
+    * Objetivos 
 
-    * Concepto e inspiración
+    * Concepto e inspiración  
 
-* Documentacion de API
+* Documentacion de API 
 
 * Retos presentados
 
-    * Borrar usuario y todo su rastro
+    * Borrar usuario y todo su rastro 
 
-    * Validacion de email
+    * Validacion de email 
 
-    * Middelware de errores
+    * Middelware de errores 
 
-    * Seleccion de DB
+    * Seleccion de DB 
 
-    * Problemas varios con email de confirmacion
-
-* Agradecimientos
+    * Problemas varios con email de confirmacion 
 
 * En el tintero
-
-    * Documentacion de API con Swagger
-
-    * Testing con Jest y Supertest
 
 * Autor
 
@@ -40,7 +34,9 @@
 
 ## Tecnologias utilizadas
 
-<!-- FALTA INTRODUCIR IMAGENES -->
+![portada](./assets/toReadme/mongoose.png)
+
+Este proyecto está basado en un servidor de NodeJs con Express. La base de datos es MongoDB y para trabajar con ella usamos Mongoose. También hemos utilizado otros paquetes de NPM como: bcryptjs, dotenv, jsonwebtoken, multer, nodemailer y validator.
 
 ## Instalación y despliegue
 
@@ -58,6 +54,101 @@ En el caso de querer usar el proyecto en un servidor local tienes que hacer los 
 
 Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge](https://www.thebridge.tech/), consiste en generar el BackEnd de una red social basado principalmente en NodeJS y MongoDB. Parte de la intencion de este ejercicio es trabajar la buenas practicas de "clean code" y el uso de ramas en GIT
 
+## Objetivos
+
+### Endpoints
+
+- [x] Posts
+
+    - [x] Endpoint para crear un post( tiene que estar autenticado)
+
+    - [x] Endpoint para actualizar un post ( tiene que estar autenticado)
+
+    - [x] Endpoint para eliminar un post( tiene que estar autenticado)
+
+    - [x] Endpoint para traer todos los posts junto a los usuarios que hicieron ese post y junto a los comentarios del post
+
+    - [x] Endpoint para buscar post por nombre
+
+    - [x] Endpoint para buscar post por id
+
+    - [x] Implementa validación a la hora de crear un post para que se rellene todos los campos(salvo la imagen, que no sea requerida) y si no se hace que devuelva un mensaje
+
+    - [x] Paginación de 10 en 10
+
+    - [x] Likes:
+
+        - [x] Endpoint para dar un like a un post
+
+        - [x] Endpoint para quitar like a un post
+
+- [x] Comments
+
+    - [x] Endpoint para crear un comentario en un determinado post
+
+- [x] Usuarios
+
+    - [x] Endpoint para registrar un usuario utilizando bcrypt
+
+    - [x] Implementa el correo de confirmación para el registro
+
+    - [x] Endpoint para login(utilizando bcrypt +JWT)
+
+    - [x] Validación en el login:
+
+        - [x] Si no has confirmado tu correo no puedes conectarte
+
+    - [x] Endpoint que nos traiga la información del usuario conectado
+
+    - [x] Endpoint para el logout
+
+    - [x] Implementa validación a la hora de crear un usuario para que se rellene todos los campos y si no se hace que devuelva un mensaje
+
+- [x] Backend disponible en producción (Heroku).
+
+- [x] Middleware para comprobar la autoría del post a la hora de editar/eliminar el mismo.
+
+### Extras
+
+- [x] Middleware para comprobar la autoría del comentario a la hora de editar/eliminar el mismo.
+
+- [x] Implementa el middleware multer para poder adjuntar imágenes al crear o actualizar posts.
+
+- [x] Implementa el middleware multer para poder adjuntar imágenes al crear o actualizar un usuario.
+
+- [x] Implementación de followers:
+
+    - [x] Que puedas seguir a otros usuarios
+
+    - [x] Que puedas dejar de seguir a otros usuarios
+
+- [x] El Endpoint que nos trae la información del usuario conectado, además que nos traiga los posts y el número de seguidores que tiene
+
+- [x] Endpoint que nos trae la información del usuario conectado junto a sus post y número de followers, también que nos muestre el nombre de los followers que siguen al usuario conectado
+
+- [x] El endpoint que trae todos los posts junto a los usuarios que hicieron ese post y junto a los comentarios del post que también traiga los usuarios que hicieron los comentarios
+
+- [x] Endpoint para buscar usuario por nombre
+
+- [x] Endpoint para buscar usuario por id
+
+- [x] Aplica lo aprendido de testing con Jest y Supertest en alguna parte de tu proyecto, por ejemplo en la parte encargada de los endpoints de usuario
+
+- [x] Crea una documentación de tu proyecto
+
+- [x] Comments
+
+    - [x] CRUD comments
+
+    - [x] Likes
+
+        - [x] Dar un like a un comentario
+
+        - [x] Quitar like a un comentario
+
+## Concepto e inspiracion
+
+La idea de esta red social "Cantastik" surge de la necesidad de anonimato que requiere el mundo del graffiti, por falta de tiempo no se han podido realizar algunas implementaciones que dejarian ver mejor el enfoque del proyecto, como podria ser la implementacion de crews.
 
 # Documenteacion de API
 
@@ -107,4 +198,155 @@ Por falta de tiempo la documentacion ha sido realizada con Postman, aunque lo co
 | PUT | localhost:YourPort/comments/like/id/:_id | User | :heavy_check_mark: | :x: | Añadir like | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#9b4a7755-ef3c-4d31-a3c5-e17f515082b1) |
 | PUT | localhost:YourPort/comments/unlike/id/:_id | User | :heavy_check_mark: | :x: | Quitar like | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#d5d6e8aa-50c4-4ce0-92e5-4183291d4990) |
 
+# Retos presentados
 
+## Borrar usuario y todo su rastro
+
+El borrar un usuario es un proceso complejo, ya que un usuario contiene muchas relaciones y algunas de estas relaciones a su vez tienen más relaciones, para soluciona esto he creado un middelware el cual se ejecuta antes de ejecutarse la funcion del controlador.
+
+```JavaScript
+const deleterUser = async(req, res, next) => {
+    try {
+        let target = await User.findById(req.params._id);
+        if (target.postIds) {
+            target.postIds.forEach(async(post) => {
+                const targetPost = await Post.findById(post);
+                if (targetPost.likes) {
+                    targetPost.likes.forEach(async(like) => {
+                        await User.findByIdAndUpdate(like, { $pull: { likedPosts: targetPost._id } });
+                    })
+                }
+                if (targetPost.comments) {
+                    targetPost.comments.forEach(async(comment) => {
+                        const toDelete = await Comment.findById(comment);
+                        await User.findByIdAndUpdate(toDelete.author, { $pull: { comments: comment } });
+                        await Comment.findByIdAndDelete(comment);
+                    })
+                }
+                await User.findByIdAndUpdate(req.params._id, { $pull: { postIds: post } })
+                await Post.findByIdAndDelete(post)
+            })
+        };
+        target = await User.findById(req.params._id);
+        if (target.comments) {
+            target.comments.forEach(async(comment) => {
+                const toDelete = await Comment.findById(comment);
+                await Post.findByIdAndUpdate(toDelete.postId, { $pull: { comments: comment } });
+                await Comment.findByIdAndDelete(comment);
+            })
+        };
+        target = await User.findById(req.params._id);
+        if (target.followers) {
+            target.followers.forEach(async(follower) => {
+                await User.findByIdAndUpdate(follower, { $pull: { following: target._id } })
+            })
+        };
+        target = await User.findById(req.params._id);
+        if (target.following) {
+            target.following.forEach(async(follow) => {
+                await User.findByIdAndUpdate(follow, { $pull: { followers: target._id } })
+            })
+        };
+        target = await User.findById(req.params._id);
+        if (target.likedPosts) {
+            target.likedPosts.forEach(async(like) => {
+                await Post.findByIdAndUpdate(like, { $pull: { likes: target._id } })
+            })
+        }
+        next()
+    } catch (error) {
+        res.send({ msg: 'Error en el middelware de borrado', error })
+    }
+}
+```
+Como se puede observar se ejecutan una serie de bucles que recorren las referencia y van eliminando de forma procedimental todos los registros relacionados con ellas.
+
+Este codigo se podria refactorizar, pero por falta de tiempo no ha sido viable hacerlo.
+
+## Validacion de email
+
+Para la validacion del email originalmente se propuso usar RegExp, en lugar de eso instalamos la libreria validator, la cual realiza esta verificacion sin necesidad de picar un RegExp con los posibles fallos que esto te pueda acarrear.
+
+## Middelware de errores 
+
+Para la gestion de errores cree mi propio middelware de errores, basandome en las tipologias que arrojaban estos mismos, descubrí varios patrones que se repetian dependiendo del tipo de error que se arrojase. El codigo resultante fué el siguiente: 
+
+```JavaScript
+const TypeError = (error, req, res, next) => {
+    if (error.errors) {
+        error.feedback = []
+        for (const fail in error.errors) {
+            error.feedback.push({ path: error.errors[fail].path, message: error.errors[fail].message });
+        };
+        console.log(error.feedback);
+        return res.status(400).send({
+            message: 'Error en la validacion de los campos:',
+            feedback: error.feedback
+        });
+    } else if (error.keyPattern) {
+        const failed = Object.keys(error.keyPattern);
+        const failedValue = error.keyValue[failed[0]];
+        return res.status(400).send({
+            message: `El ${failed[0]} ${failedValue} ya está en uso.`,
+            failedField: failed[0],
+            failedValue
+        });
+
+    } else if (error.kind == "ObjectId") {
+        return res.send(`El id ${error.value} no existe`)
+    } else {
+        return res.status(500).send({ message: `Algo ha fallado en el controlador de ${error.origin}`, error });
+    }
+};
+```
+
+Este middleware te devuelve un error simplificado y mas amigable con el FrontEnd, que al final va a ser el consumidor de nuestra API y base de datos.
+
+## Seleccion de DB
+
+El proyecto puede funcionar sobre dos bases de datos, la primera es la de testing y la segunda la del Deploy, esta informacion se encuentra dentro del archivo `.env`, tambien hemos generado un "falso booleando" (Falso porque shell no acepta este tipo de variable) con el que seleccionamos a que base de datos nos vamos a conectar, esto se realiza a través de el archivo `config.js`.
+
+<h3 align=center>.env</h3>
+
+```Powershell
+MONGO_URI_TEST = 'Your MongoDB testing DB'
+
+MONGO_URI = 'Your MongoDB deploy DB'
+
+DB_TEST = true/false
+```
+
+<h3 align=center>config.js</h3>
+
+```JavaScript
+const dbConnection = async() => {
+    try {
+        if (DB_TEST == 'true') {
+            await mongoose.connect(MONGO_URI_TEST);
+            console.log('Te has conectado a la DB de testing');
+        } else {
+            await mongoose.connect(MONGO_URI);
+            console.log('Te has conectado a la DB del deploy');
+        }
+        console.log("BBDD conectada con éxito");
+    } catch (error) {
+        console.error(error);
+        throw new Error("Algo ha fallado a la hora de conectar con la BBDD");
+    }
+};
+```
+
+## Problemas varios con email de confirmacion
+
+Para conseguir que funcione Nodemailer tuvimos diversos problemas, en primer lugar optamos por utilizar Gmail como sistema de envio, pero este dominio ha protegido sus cuentas para que no se puedan mandar correos de terceros. Despues optamos por utilizar Outlook, el cual costó bastante de hacerlo funcionar (la configuracion dentro de nodemailer.js es correcta), el problema es que tras algunos correos la cuenta se autoprotege y no te deja seguir utilizandola con Nodemailer, este es el motivo por el cual están comentadas las lineas de la 21 a la 32 del controlador de usuarios, en este caso tocará verificar al usuario a través de la base de datos directamente.
+
+# En el tintero
+
+* Documentacion de API con Swagger
+
+* Testing con Jest y Supertest
+
+# Autor
+
+<h1 align=center>:mushroom:</h1>
+<h1 align=center>Mike L. Sánchez</h1>
