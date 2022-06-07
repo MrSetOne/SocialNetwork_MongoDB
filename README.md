@@ -61,6 +61,8 @@ Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge]
 
 # Documenteacion de API
 
+Por falta de tiempo la documentacion ha sido realizada con Postman, aunque lo correcto hubiese sido hacerla con Swagger, aquí pongo unas tablas resumiendo los endpoints, aunque tambien pueder ver la documentacion completa haciendo [click aquí](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ).
+
 ## Usuarios
 
 | Method | EndPoint | Auth | Params | Body | Usage | Ref |
@@ -79,3 +81,17 @@ Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge]
 | PUT | localhost:YourPort/users/follow/:_id | User | :heavy_check_mark: | :x: | Dar Follow a usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#be2da517-7e16-4823-8f78-41bcab350271) |
 | PUT | localhost:YourPort/users/unfollow/:_id | User | :heavy_check_mark: | :x: | Dar Unfollow a usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#c8f22416-84fb-4093-9f95-b63ea6b1d1e6) |
 | PUT | localhost:YourPort/users/admin/:_id | Admin | :heavy_check_mark: | :x: | Hacer a un usuario Admin | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#228a21b4-ee37-44cb-8e92-14b2d613eb16) |
+
+## Posts
+
+| Method | EndPoint | Auth | Params | Body | Usage | Ref |
+ ------- | -------- | ---- | ------ | ---- | ----- | --- |
+| POST | localhost:YourPort/posts/ | User | :x: | :heavy_check_mark: | Crear un nuevo post | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#8b397c94-a1b4-4fb6-8b54-e5ff4a408829) |
+| PUT | localhost:YourPort/posts/id/:_id | Author | :heavy_check_mark: | :heavy_check_mark: | Modificar un post | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#43843463-8971-4844-bf21-7523a8c39ba5) |
+| DELETE | localhost:YourPort/posts/admin/id/:_id | Admin | :heavy_check_mark: | :x: | Eliminar un post como admin | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#eb4ba9a3-2075-4ffa-a118-2cc5b1f19bc0) |
+| DELETE | localhost:YourPort/posts/id/:_id | Author | :heavy_check_mark: | :x: | Eliminar un post como autor | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#257502e5-d0c0-4d2f-8684-49f82179877b) |
+| GET | localhost:YourPort/posts/?page=:page&limit=:limmit | User | :heavy_check_mark: | :x: | Obtener todos los posts | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#b56c1759-9413-4d71-aaf5-e5c5f46e3dec) |
+| GET | localhost:YourPort/posts/title/:title | User | :heavy_check_mark: | :x: | Buscar posts por titulo | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#d44948f4-e883-43a1-835f-4ecbbab75177) |
+| GET | localhost:YourPort/posts/id/:_id | User | :heavy_check_mark: | :x: | Obtener post por id | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#6f13611f-4397-4f02-a846-f0fd877e0eb3) |
+| PUT | localhost:YourPort/posts/like/id/:_id | User | :heavy_check_mark: | :x: | Dar like a un post | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#f6e60538-7a01-406a-8700-fc12b939dd51) |
+| PUT | localhost:YourPort/posts/unlike/id/:_id | User | :heavy_check_mark: | :x: | Quitar like a un post | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#1a9e103c-51a5-4ae3-9d38-1353afd9f3d4) |

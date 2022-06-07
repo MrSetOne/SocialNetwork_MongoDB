@@ -205,7 +205,10 @@ const userController = {
     },
     async doAnAdmin(req, res, next) {
         try {
-            const newAdmin = await User.findByIdAndUpdate(req.params._id, { role: "admin" }, { new: true });
+            const newAdmin = await User.findByIdAndUpdate(req.params._id, { role: "admin" });
+            if (newAdmin.role == "admin") {
+                return res.status(400).send(`El usuario ${newAdmin.username} ya era admin`)
+            }
             res.status(200).send(`Ahora el usuario ${newAdmin.username} es ${newAdmin.role}`)
         } catch (error) {
             next(error)

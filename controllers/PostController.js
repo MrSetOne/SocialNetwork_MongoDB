@@ -7,7 +7,10 @@ const User = require("../models/User")
 const postController = {
     async create(req, res, next) {
         try {
-            const newPost = await Post.create({...req.body, userId: req.user._id, img: req.file.filename })
+            if (req.file) {
+                req.body.img = req.file.filename
+            }
+            const newPost = await Post.create({...req.body, userId: req.user._id })
             await User.findByIdAndUpdate(req.user._id, { $push: { postIds: newPost._id } })
             res.status(201).send({ message: 'Se ha generado un nuevo post:', newPost })
         } catch (error) {
@@ -16,9 +19,17 @@ const postController = {
     },
     async update(req, res) {
         try {
-            const { userId, likes, comments, ...data } = req.body;
-            const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: req.file.filename }, { new: true })
-            res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
+            if (req.file) {
+                req.body.img = req.file.filename
+                const { userId, likes, comments, ...data } = req.body;
+                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data }, { new: true })
+                res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
+            } else {
+                const toUpdate = await Post.findById(req.params._id);
+                const { userId, likes, comments, ...data } = req.body;
+                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: toUpdate.img }, { new: true })
+                res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
+            }
         } catch (error) {
             res.send(error)
         }
@@ -37,7 +48,8 @@ const postController = {
             const allPosts = await Post.find()
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
-                .populate(["userId", "comments"])
+                .populate('userId', ["-email", "-confirmed", "-role", "-likedPosts", "-updatedAt"])
+                .populate("comments")
             res.send(allPosts)
         } catch (error) {
             res.send(error)
