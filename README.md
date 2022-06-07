@@ -348,4 +348,4 @@ Para conseguir que funcione Nodemailer tuvimos diversos problemas, en primer lug
 
 # Autor
 
-<h1 align=center>Mike L. Sánchez :mushroom:</h1>
+<h2>:mushroom: Mike L. Sánchez</h2>
