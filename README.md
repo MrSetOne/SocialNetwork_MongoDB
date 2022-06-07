@@ -10,7 +10,9 @@
 
     * Objetivos 
 
-    * Concepto e inspiración  
+    * Concepto e inspiración
+
+    * Organizacion
 
 * Documentacion de API 
 
@@ -149,6 +151,12 @@ Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge]
 ## Concepto e inspiracion
 
 La idea de esta red social "Cantastik" surge de la necesidad de anonimato que requiere el mundo del graffiti, por falta de tiempo no se han podido realizar algunas implementaciones que dejarian ver mejor el enfoque del proyecto, como podria ser la implementacion de crews.
+
+## Organizacion
+
+![treloo](./assets/toReadme/Trello.png)
+
+Para la organizacion del proyecto he usado trello, con la intencion de que no se me pasase nada por alto, tratando de tenerlo lo mas "cuidado" posible.
 
 # Documenteacion de API
 
