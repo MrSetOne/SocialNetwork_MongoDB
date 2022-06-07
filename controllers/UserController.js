@@ -13,8 +13,11 @@ const userController = {
             if (req.body.password) {
                 req.body.role = "user";
                 req.body.confirmed = false;
+                if (req.file) {
+                    req.body.img = req.file.filename;
+                }
                 req.body.password = await bcrypt.hash(req.body.password, 10)
-                const newUser = await User.create({...req.body, img: req.file.filename })
+                const newUser = await User.create({...req.body })
                     // if (newUser) {
                     //     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     //     const url = "http://localhost:8080/users/confirm/" + initialToken;
@@ -118,8 +121,10 @@ const userController = {
     },
     async getAllUsers(req, res, next) {
         try {
-            const allUsers = await User.find({}, { username: 1, postIds: 1 })
-                .populate('postIds', ["title"]) //TODO si lo pones normal te devuelve los que pides y si pones "-" te devuelve todos menos ese
+            const allUsers = await User.find({}, { username: 1, postIds: 1, followers: 1, following: 1 })
+                .populate('postIds', ["title"])
+                .populate('followers')
+                .populate('following')
             res.status(200).send({ message: 'La lista de usuarios es:', allUsers })
         } catch (error) {
             res.send(error)
