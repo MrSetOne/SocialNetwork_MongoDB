@@ -4,7 +4,7 @@
     "description": "Api basada en mongoDB con mongoose que administra una base de datos para una red social",
     "main": "main.js",
     "scripts": {
-        "start": "noder main.js",
+        "start": "node main.js",
         "test": "echo \"Error: no test specified\" && exit 1",
         "dev": "nodemon main.js"
     },
