@@ -62,5 +62,5 @@ Es un proyecto planteado como ejercicio del Bootcamp de FullStack en [TheBridge]
 # Documenteacion de API
 
 | Method | EndPoint | Role | Params | Body | Usage | Ref |
-|--------|----------|------|--------|------|-------|
+ ------- | -------- | ---- | ------ | ---- | ----- | --- |
 | POST | localhost:YourPort/users/ | NA | :x: | :heavy_check_mark: | Crear nuevo usuario | [Link](https://documenter.getpostman.com/view/21013360/Uz5KjZHZ#0ff61f4f-673d-4cd4-adec-304c39c7fdb5)
