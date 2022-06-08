@@ -103,9 +103,26 @@ const userController = {
     },
     async updateUser(req, res, next) {
         try {
-            const { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
-            const updatedUser = await User.findByIdAndUpdate(req.user._id, {...data, img: req.file.filename }, { new: true })
-            res.send({ message: `Has modificado tu perfil`, updatedUser })
+            if (req.file) {
+                req.body.img = req.file.filename
+                let { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
+                if (data.password) {
+                    data.password = await bcrypt.hash(data.password, 10)
+                }
+                const updatedUser = await User.findByIdAndUpdate(req.user._id, {...data }, { new: true })
+                res.send({ message: `Has modificado tu perfil`, updatedUser })
+            } else {
+                const toUpdate = await User.findById(req.user._id);
+                console.log(toUpdate);
+                req.body.img = toUpdate.img
+                let { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
+                if (data.password) {
+                    data.password = await bcrypt.hash(data.password, 10)
+                }
+                const updatedUser = await User.findByIdAndUpdate(req.user._id, {...data }, { new: true })
+                res.send({ message: `Has modificado tu perfil`, updatedUser })
+            }
+
         } catch (error) {
             res.send(error)
         }
