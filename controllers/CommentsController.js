@@ -13,9 +13,9 @@ const commentsController = {
                 author: req.user._id,
                 postId: req.params._id
             })
-            await User.findByIdAndUpdate(req.user._id, { $push: { comments: newComment._id } });
+            const author = await User.findByIdAndUpdate(req.user._id, { $push: { comments: newComment._id } }, { new: true });
             await Post.findByIdAndUpdate(req.params._id, { $push: { comments: newComment._id } })
-            res.status(201).send({ message: 'Se ha añadido un nuevo comentario:', newComment })
+            res.status(201).send({ message: 'Se ha añadido un nuevo comentario:', newComment, author })
         } catch (error) {
             error.origin = "comments"
             next(error)

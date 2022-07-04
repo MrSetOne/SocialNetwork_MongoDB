@@ -49,7 +49,13 @@ const postController = {
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .populate('userId', ["-email", "-confirmed", "-role", "-likedPosts", "-updatedAt"])
-                .populate("comments")
+                .populate('likes', ["_id", "username", "img"])
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "author"
+                    }
+                })
             res.send(allPosts)
         } catch (error) {
             res.send(error)
@@ -83,7 +89,7 @@ const postController = {
             } else {
                 await Post.findByIdAndUpdate(req.params._id, { $push: { likes: req.user._id } })
                 await User.findByIdAndUpdate(req.user._id, { $push: { likedPosts: req.params._id } })
-                res.send(`Has dado me gusta al post ${req.params._id}`)
+                res.send({ msg: `Has dado me gusta al post ${req.params._id}`, user: req.user })
             }
         } catch (error) {
             error.origin = "post"
@@ -98,7 +104,7 @@ const postController = {
             } else {
                 await Post.findByIdAndUpdate(req.params._id, { $pull: { likes: req.user._id } })
                 await User.findByIdAndUpdate(req.user._id, { $pull: { likedPosts: req.params._id } })
-                res.send(`Has quitado el me gusta al post ${req.params._id}`)
+                res.send({ msg: `Has quitado el me gusta al post ${req.params._id}`, user: req.user._id })
             }
         } catch (error) {
             res.send(error)

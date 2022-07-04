@@ -15,7 +15,7 @@ const imgSourcePorfile = multer({ storage: storagePorfile });
 
 const storagePost = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, './assets/posts');
+        cb(null, './assets/postsImgs');
     },
     filename: function(req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname)

@@ -157,10 +157,10 @@ const userController = {
     },
     async getSession(req, res) {
         try {
-            let sessionUser = await User.findById(req.user._id, { username: 1, postIds: 1, followers: 1, following: 1 })
-                .populate("postIds", ["-userId"])
-                .populate("followers", ["username"])
-                .populate("following", ["username"])
+            let sessionUser = await User.findById(req.user._id, { tokens: 0 })
+                .populate("postIds")
+                .populate("followers")
+                .populate("following")
             res.status(200).send({ message: 'Tu sesión acual es:', currentToken: req.headers.authorization, sessionUser })
         } catch (error) {
             res.send({ error })
@@ -168,7 +168,12 @@ const userController = {
     },
     async getById(req, res) {
         try {
-            const foundUser = await User.findById(req.params._id).select("username img posts followers following likedPosts")
+            const foundUser = await User.findById(req.params._id)
+                // .populate("postIds")
+                .populate({
+                    path: "postIds",
+                    populate: ["likes", { path: "comments", populate: "author" }]
+                })
             res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
         } catch (error) {
             res.send(error)
