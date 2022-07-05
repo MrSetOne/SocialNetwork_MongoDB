@@ -10,6 +10,7 @@ router.put('/id/:_id', authentication, isAuthorPost, imgSourcePost.single('img')
 router.delete('/id/:_id', authentication, isAuthorPost, deleterPost, PostController.delete);
 router.delete('/admin/id/:_id', authentication, isAdmin, deleterPost, PostController.delete);
 router.get('/', authentication, PostController.getAll);
+router.get('/author/:_id', authentication, PostController.getByAuthor)
 router.get('/title/:title', authentication, PostController.getByTitle);
 router.get('/id/:_id', authentication, PostController.getById);
 router.put('/like/id/:_id', authentication, PostController.like);

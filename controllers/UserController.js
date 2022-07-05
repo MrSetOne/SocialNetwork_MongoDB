@@ -172,11 +172,13 @@ const userController = {
                 // .populate("postIds")
                 .populate({
                     path: "postIds",
-                    populate: ["likes", { path: "comments", populate: "author" }]
+                    populate: ["likes", "userId", { path: "comments", populate: "author" }]
                 })
+            console.log(foundUser)
             res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
         } catch (error) {
-            res.send(error)
+            console.log(error)
+            res.status(404).send(error)
         }
     },
     async getByUsername(req, res) {
