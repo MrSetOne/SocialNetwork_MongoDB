@@ -10,10 +10,13 @@ const postController = {
             if (req.file) {
                 req.body.img = req.file.filename
             }
-            const newPost = await Post.create({...req.body, userId: req.user._id })
+            let newPost = await Post.create({...req.body, userId: req.user._id })
+            console.log(newPost)
+            newPost = await newPost.populate('userId', ["username", "img"])
             await User.findByIdAndUpdate(req.user._id, { $push: { postIds: newPost._id } })
             res.status(201).send({ message: 'Se ha generado un nuevo post:', newPost })
         } catch (error) {
+            console.log(error)
             next(error)
         }
     },
@@ -46,6 +49,7 @@ const postController = {
         try {
             const { page = 1, limit = 10 } = req.query;
             const allPosts = await Post.find()
+                .sort("-createdAt")
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .populate('userId', ["-email", "-confirmed", "-role", "-likedPosts", "-updatedAt"])
@@ -65,6 +69,7 @@ const postController = {
         try {
             const { page = 1, limit = 18 } = req.query;
             const allPosts = await Post.find({ userId: req.params._id })
+                .sort("-createdAt")
                 .limit(limit * 1)
                 .skip((page - 1) * limit)
                 .populate('userId', ["username", "img"])
