@@ -67,11 +67,11 @@ const postController = {
     },
     async getByAuthor(req, res) {
         try {
-            const { page = 1, limit = 18 } = req.query;
+            // const { page = 1, limit = 18 } = req.query;
             const allPosts = await Post.find({ userId: req.params._id })
                 .sort("-createdAt")
-                .limit(limit * 1)
-                .skip((page - 1) * limit)
+                // .limit(limit * 1)
+                // .skip((page - 1) * limit)
                 .populate('userId', ["username", "img"])
                 .populate('likes', ["_id", "username", "img"])
                 .populate({
