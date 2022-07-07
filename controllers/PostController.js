@@ -92,10 +92,19 @@ const postController = {
                 return res.status(400).send('Busqueda demasiado larga')
             }
             const search = new RegExp(req.params.title, "i");
-            const foundPosts = await Post.find({ title: search });
+            const foundPosts = await Post.find({ title: search }).sort("-createdAt")
+                .populate('userId', ["username", "img"])
+                .populate('likes', ["_id", "username", "img"])
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "author",
+                        select: ["username", "img"]
+                    }
+                });
             res.send(foundPosts);
         } catch (error) {
-            res.send(error)
+            res.status(404).send(error)
         }
     },
     async getById(req, res) {
