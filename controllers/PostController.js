@@ -83,7 +83,7 @@ const postController = {
                 })
             res.send(allPosts)
         } catch (error) {
-            res.send(error)
+            res.status(404).send(error)
         }
     },
     async getByTitle(req, res) {
@@ -100,10 +100,19 @@ const postController = {
     },
     async getById(req, res) {
         try {
-            const foundPosts = await Post.findById(req.params._id).populate('userId')
+            const foundPosts = await Post.findById(req.params._id)
+                .populate('userId', ["username", "img"])
+                .populate('likes', ["_id", "username", "img"])
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "author",
+                        select: ["username", "img"]
+                    }
+                })
             res.send(foundPosts)
         } catch (error) {
-            res.send(error)
+            res.status(404).send(error)
         }
     },
     async like(req, res, next) {
