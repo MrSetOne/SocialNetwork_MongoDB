@@ -18,18 +18,18 @@ const userController = {
                 }
                 req.body.password = await bcrypt.hash(req.body.password, 10)
                 const newUser = await User.create({...req.body })
-                    // if (newUser) {
-                    //     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
-                    //     const url = "http://localhost:8080/users/confirm/" + initialToken;
-                    //     await transporter.sendMail({
-                    //         from: "lara.sanchez.michael.dev@outlook.es",
-                    //         to: newUser.email,
-                    //         subject: "Confirma tu registro",
-                    //         html: `<h2>¡Hola ${newUser.username}!</h2>
-                    //                         <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
-                    //                     `
-                    //     })
-                    // }
+                if (newUser) {
+                    const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
+                    const url = "http://localhost:8080/users/confirm/" + initialToken;
+                    await transporter.sendMail({
+                        from: "lara.sanchez.michael.dev@gmail.com",
+                        to: newUser.email,
+                        subject: "Confirma tu registro",
+                        html: `<h2>¡Hola ${newUser.username}!</h2>
+                                            <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
+                                        `
+                    })
+                }
                 res.status(201).send({ message: `Se ha creado el usuario ${req.body.username}`, newUser });
             } else {
                 res.status(400).send(`Tu correo: ${req.body.email} no tiene un formato valido.`)

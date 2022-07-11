@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
 
     confirmed: Boolean,
 
+    bio: String,
+
     role: String,
 
     tokens: [],

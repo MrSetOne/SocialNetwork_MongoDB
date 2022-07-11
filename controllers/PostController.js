@@ -56,6 +56,7 @@ const postController = {
     async getAll(req, res) {
         try {
             const { page = 1, limit = 10 } = req.query;
+            const count = await Post.count()
             const allPosts = await Post.find()
                 .sort("-createdAt")
                 .limit(limit * 1)
@@ -68,7 +69,8 @@ const postController = {
                         path: "author"
                     }
                 })
-            res.send(allPosts)
+            console.log({...allPosts, count })
+            res.send({ allPosts, count })
         } catch (error) {
             res.send(error)
         }
