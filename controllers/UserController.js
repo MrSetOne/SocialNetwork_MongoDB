@@ -173,7 +173,7 @@ const userController = {
                 .populate({
                     path: "postIds",
                     populate: ["likes", "userId", { path: "comments", populate: "author" }]
-                })
+                }).populate('followers').populate('following')
             console.log(foundUser)
             res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
         } catch (error) {
@@ -203,8 +203,8 @@ const userController = {
                 res.send('Ya sigues a este usuario')
             } else {
                 await User.findByIdAndUpdate(req.params._id, { $push: { followers: req.user._id } }, { new: true })
-                const follower = await User.findByIdAndUpdate(req.user._id, { $push: { following: req.params._id } }, { new: true })
-                res.send(`El usuario ${follower.username} ahora sigue a ${toFollow.username}`)
+                const follower = await User.findByIdAndUpdate(req.user._id, { $push: { following: req.params._id } }, { new: true }).populate('following')
+                res.send({ msg: `El usuario ${follower.username} ahora sigue a ${toFollow.username}`, follower })
             }
         } catch (error) {
             res.send({ message: `El usuario con id ${req.params._id} no existe`, error })
@@ -218,8 +218,8 @@ const userController = {
             const target = await User.findById(req.params._id);
             if (target.followers.includes(req.user._id)) {
                 const toUnfollow = await User.findByIdAndUpdate(req.params._id, { $pull: { followers: req.user._id } }, { new: true })
-                const unfollower = await User.findByIdAndUpdate(req.user._id, { $pull: { following: req.params._id } }, { new: true })
-                res.send(`El usuario ${unfollower.username} ha dejado de seguir a ${toUnfollow.username}`)
+                const unfollower = await User.findByIdAndUpdate(req.user._id, { $pull: { following: req.params._id } }, { new: true }).populate('following')
+                res.send({ msg: `El usuario ${unfollower.username} ha dejado de seguir a ${toUnfollow.username}`, unfollower })
             } else {
                 res.send(`No sigues al usuario con id ${req.params._id}`)
             }

@@ -30,7 +30,15 @@ const postController = {
             } else {
                 const toUpdate = await Post.findById(req.params._id);
                 const { userId, likes, comments, ...data } = req.body;
-                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: toUpdate.img }, { new: true })
+                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: toUpdate.img }, { new: true }).populate('userId', ["username", "img"])
+                    .populate('likes', ["_id", "username", "img"])
+                    .populate({
+                        path: "comments",
+                        populate: {
+                            path: "author",
+                            select: ["username", "img"]
+                        }
+                    })
                 res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
             }
         } catch (error) {
