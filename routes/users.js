@@ -21,6 +21,7 @@ router.get('/user/:username', authentication, UserController.getByUsername);
 router.put('/follow/:_id', authentication, userController.follow);
 router.put('/unfollow/:_id', authentication, userController.unfollow);
 router.put('/admin/:_id', authentication, isAdmin, userController.doAnAdmin);
+router.put('/firsttime', authentication, userController.wellcome)
 
 
 module.exports = router

@@ -13,6 +13,7 @@ const userController = {
             if (req.body.password) {
                 req.body.role = "user";
                 req.body.confirmed = false;
+                req.body.firstVisit = true;
                 if (req.file) {
                     req.body.img = req.file.filename;
                 }
@@ -20,7 +21,7 @@ const userController = {
                 const newUser = await User.create({...req.body })
                 if (newUser) {
                     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
-                    const url = "http://localhost:8080/users/confirm/" + initialToken;
+                    const url = "http://localhost:3000/confirm/" + initialToken;
                     await transporter.sendMail({
                         from: "lara.sanchez.michael.dev@gmail.com",
                         to: newUser.email,
@@ -42,6 +43,7 @@ const userController = {
     },
     async verify(req, res) {
         try {
+            console.log('trata de entrar')
             const payload = jwt.verify(req.params.authorization, jwt_secret);
             const user = await User.findOne({ _id: payload._id });
             if (!user) {
@@ -55,11 +57,23 @@ const userController = {
                 res.send({ message: `El usuario ${user.username} se ha verificado`, updatedUser })
             }
         } catch (error) {
+            console.log('se rejecta')
             res.status(404).send('Algo ha fallado en la validacion')
         }
-
-
     },
+
+    async wellcome(req, res) {
+        try {
+            const updatedUser = await User.findByIdAndUpdate(req.user._id, { firstVisit: false }, { new: true }).populate({
+                path: "postIds",
+                populate: ["likes", "userId", { path: "comments", populate: "author" }]
+            }).populate('followers').populate('following')
+            res.status(200).send({ msg: 'El usuario ya ha visitado la web por primer vez', updatedUser })
+        } catch (error) {
+            res.status(404).send('No es la primera vez que entra')
+        }
+    },
+
     async login(req, res, next) {
         try {
             if (!req.body.email || !req.body.password) {

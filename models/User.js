@@ -24,6 +24,8 @@ const userSchema = new mongoose.Schema({ //Definimos el tipo de dato que va a co
 
     bio: String,
 
+    firstVisit: Boolean,
+
     role: String,
 
     tokens: [],

@@ -145,8 +145,10 @@ const postController = {
                 res.send({ msg: `Has dado me gusta al post ${req.params._id}`, user: req.user })
             }
         } catch (error) {
-            error.origin = "post"
-            next(error)
+            // error.origin = "post"
+            // next(error)
+            console.log(error)
+            res.send(error)
         }
     },
     async unlike(req, res) {
@@ -160,6 +162,7 @@ const postController = {
                 res.send({ msg: `Has quitado el me gusta al post ${req.params._id}`, user: req.user._id })
             }
         } catch (error) {
+            console.log(error)
             res.send(error)
         }
     }
