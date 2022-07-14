@@ -80,8 +80,10 @@ const userController = {
                 res.send('Por favor introduce email y contraseña')
             }
             const loggedUser = await User.findOne({
-                email: req.body.email
-            });
+                    email: req.body.email
+                }).populate("postIds")
+                .populate("followers")
+                .populate("following");
             if (!loggedUser) {
                 res.status(404).send('Email o contraseña incorrectos');
             };
