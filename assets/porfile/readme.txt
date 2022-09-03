@@ -1,1 +1,0 @@
-Aqui van las fotos de perfil
