@@ -14,9 +14,6 @@ const userController = {
                 req.body.role = "user";
                 req.body.confirmed = false;
                 req.body.firstVisit = true;
-                if (req.file) {
-                    req.body.img = req.file.filename;
-                }
                 req.body.password = await bcrypt.hash(req.body.password, 10)
                 const newUser = await User.create({...req.body })
                 if (newUser) {
@@ -57,7 +54,6 @@ const userController = {
                 res.send({ message: `El usuario ${user.username} se ha verificado`, updatedUser })
             }
         } catch (error) {
-            console.log('se rejecta')
             res.status(404).send('Algo ha fallado en la validacion')
         }
     },

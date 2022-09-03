@@ -4,9 +4,10 @@ const UserController = require('../controllers/UserController');
 const { authentication, isAdmin, itsMe } = require('../middelwares/authentications');
 const { imgSourcePorfile } = require('../middelwares/imgsource');
 const { deleterUser } = require('../middelwares/deleters');
+const uploadFirebase = require('../services/firebase')
 const router = express.Router();
 
-router.post('/', imgSourcePorfile.single('img'), UserController.create);
+router.post('/', imgSourcePorfile.single('img'), uploadFirebase, UserController.create);
 router.get('/confirm/:authorization', UserController.verify);
 router.put('/login', UserController.login);
 router.put('/logout', authentication, UserController.logout);
