@@ -4,7 +4,6 @@ const TypeError = (error, req, res, next) => {
         for (const fail in error.errors) {
             error.feedback.push({ path: error.errors[fail].path, message: error.errors[fail].message });
         };
-        console.log(error.feedback);
         return res.status(400).send({
             message: 'Error en la validacion de los campos:',
             feedback: error.feedback

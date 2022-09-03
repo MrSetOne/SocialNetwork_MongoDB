@@ -7,40 +7,30 @@ const User = require("../models/User")
 const postController = {
     async create(req, res, next) {
         try {
-            if (req.file) {
-                req.body.img = req.file.filename
-            }
             let newPost = await Post.create({...req.body, userId: req.user._id })
-            console.log(newPost)
             newPost = await newPost.populate('userId', ["username", "img"])
             await User.findByIdAndUpdate(req.user._id, { $push: { postIds: newPost._id } })
             res.status(201).send({ message: 'Se ha generado un nuevo post:', newPost })
         } catch (error) {
-            console.log(error)
             next(error)
         }
     },
     async update(req, res) {
         try {
-            if (req.file) {
-                req.body.img = req.file.filename
-                const { userId, likes, comments, ...data } = req.body;
-                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data }, { new: true })
-                res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
-            } else {
-                const toUpdate = await Post.findById(req.params._id);
-                const { userId, likes, comments, ...data } = req.body;
-                const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: toUpdate.img }, { new: true }).populate('userId', ["username", "img"])
-                    .populate('likes', ["_id", "username", "img"])
-                    .populate({
-                        path: "comments",
-                        populate: {
-                            path: "author",
-                            select: ["username", "img"]
-                        }
-                    })
-                res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
-            }
+
+            const toUpdate = await Post.findById(req.params._id);
+            const { userId, likes, comments, ...data } = req.body;
+            const updatedPost = await Post.findByIdAndUpdate(req.params._id, {...data, img: toUpdate.img }, { new: true }).populate('userId', ["username", "img"])
+                .populate('likes', ["_id", "username", "img"])
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "author",
+                        select: ["username", "img"]
+                    }
+                })
+            res.status(200).send({ message: 'Publicación modificada con exito', updatedPost })
+
         } catch (error) {
             res.send(error)
         }
@@ -69,7 +59,6 @@ const postController = {
                         path: "author"
                     }
                 })
-            console.log({...allPosts, count })
             res.send({ allPosts, count })
         } catch (error) {
             res.send(error)
@@ -145,9 +134,6 @@ const postController = {
                 res.send({ msg: `Has dado me gusta al post ${req.params._id}`, user: req.user })
             }
         } catch (error) {
-            // error.origin = "post"
-            // next(error)
-            console.log(error)
             res.send(error)
         }
     },
@@ -162,7 +148,6 @@ const postController = {
                 res.send({ msg: `Has quitado el me gusta al post ${req.params._id}`, user: req.user._id })
             }
         } catch (error) {
-            console.log(error)
             res.send(error)
         }
     }

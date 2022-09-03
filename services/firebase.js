@@ -31,7 +31,7 @@ const uploadFirebase = (req, res, next) => {
 
         stream.on('finish', async() => {
             await file.makePublic();
-            req.body.imgUrl = file.metadata.mediaLink
+            req.body.img = file.metadata.mediaLink
             next()
         })
 

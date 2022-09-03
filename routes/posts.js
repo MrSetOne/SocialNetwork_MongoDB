@@ -2,11 +2,12 @@ const express = require('express');
 const PostController = require('../controllers/PostController');
 const { authentication, isAdmin, isAuthorPost } = require('../middelwares/authentications');
 const { deleterPost } = require('../middelwares/deleters');
-const { imgSourcePost } = require('../middelwares/imgsource');
+const imgSource = require('../middelwares/imgsource');
+const uploadFirebase = require('../services/firebase')
 const router = express.Router();
 
-router.post('/', authentication, imgSourcePost.single('img'), PostController.create);
-router.put('/id/:_id', authentication, isAuthorPost, imgSourcePost.single('img'), PostController.update);
+router.post('/', authentication, imgSource.single('img'), uploadFirebase, PostController.create);
+router.put('/id/:_id', authentication, isAuthorPost, imgSource.single('img'), uploadFirebase, PostController.update);
 router.delete('/id/:_id', authentication, isAuthorPost, deleterPost, PostController.delete);
 router.delete('/admin/id/:_id', authentication, isAdmin, deleterPost, PostController.delete);
 router.get('/', authentication, PostController.getAll);

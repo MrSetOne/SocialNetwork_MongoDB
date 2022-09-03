@@ -34,13 +34,11 @@ const userController = {
             }
         } catch (error) {
             error.origin = "user";
-            console.log(error);
             next(error);
         }
     },
     async verify(req, res) {
         try {
-            console.log('trata de entrar')
             const payload = jwt.verify(req.params.authorization, jwt_secret);
             const user = await User.findOne({ _id: payload._id });
             if (!user) {
@@ -116,7 +114,7 @@ const userController = {
     async updateUser(req, res, next) {
         try {
             if (req.file) {
-                req.body.img = req.file.filename
+                console.log(req.body)
                 let { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
                 if (data.password) {
                     data.password = await bcrypt.hash(data.password, 10)
@@ -125,7 +123,6 @@ const userController = {
                 res.send({ message: `Has modificado tu perfil`, updatedUser })
             } else {
                 const toUpdate = await User.findById(req.user._id);
-                console.log(toUpdate);
                 req.body.img = toUpdate.img
                 let { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
                 if (data.password) {
@@ -186,10 +183,8 @@ const userController = {
                     path: "postIds",
                     populate: ["likes", "userId", { path: "comments", populate: "author" }]
                 }).populate('followers').populate('following')
-            console.log(foundUser)
             res.status(200).send({ message: `Los datos publicos del usuario ${foundUser.username}`, foundUser })
         } catch (error) {
-            console.log(error)
             res.status(404).send(error)
         }
     },
