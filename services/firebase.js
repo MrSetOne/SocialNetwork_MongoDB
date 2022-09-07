@@ -2,7 +2,7 @@ const { FIREBASESTORAGE, TYPE, PROJECT_ID, PRIVATE_KEY_ID, PRIVATE_KEY, CLIENT_E
 
 var admin = require("firebase-admin");
 
-var serviceAccount = require("../config/firebase.json");
+// var serviceAccount = require("../config/firebase.json");
 
 admin.initializeApp({
     credential: admin.credential.cert({
