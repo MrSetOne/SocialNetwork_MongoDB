@@ -27,26 +27,20 @@ const userController = {
                                             <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
                                         `
                     })
-                    console.log(`Se manda el mail`);
                 }
                 res.status(201).send({ message: `Se ha creado el usuario ${req.body.username}`, newUser });
             } else {
                 res.status(400).send(`Tu correo: ${req.body.email} no tiene un formato valido.`)
             }
         } catch (error) {
-            console.log(error);
             error.origin = "user";
             next(error);
         }
     },
     async verify(req, res) {
         try {
-            console.log('entra');
             const payload = jwt.verify(req.params.authorization, JWT_SECRET);
-            console.log('se genera payload');
             const user = await User.findOne({ _id: payload._id });
-            console.log('se genera user');
-            console.log(user);
             if (!user) {
                 res.status(400).send('El usuario no existe')
             } else {
@@ -120,7 +114,6 @@ const userController = {
     async updateUser(req, res, next) {
         try {
             if (req.file) {
-                console.log(req.body)
                 let { tokens, confirmed, role, posts, followers, following, likedPosts, ...data } = req.body
                 if (data.password) {
                     data.password = await bcrypt.hash(data.password, 10)
