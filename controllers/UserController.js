@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { all } = require('express/lib/application');
 const jwt = require('jsonwebtoken');
-const { jwt_secret } = process.env
+const { JWT_SECRET } = process.env
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
 
@@ -19,7 +19,7 @@ const userController = {
                 console.log(newUser);
                 if (newUser) {
                     console.log('Se trata de enviar el mail');
-                    const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
+                    const initialToken = await jwt.sign({ _id: newUser._id }, JWT_SECRET, { expiresIn: '24h' })
                     const url = "http://localhost:3000/confirm/" + initialToken;
                     console.log(`La direccion es: ${url}`);
                     await transporter.sendMail({
