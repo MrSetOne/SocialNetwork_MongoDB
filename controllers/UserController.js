@@ -16,9 +16,12 @@ const userController = {
                 req.body.firstVisit = true;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
                 const newUser = await User.create({...req.body })
+                console.log(newUser);
                 if (newUser) {
+                    console.log('Se trata de enviar el mail');
                     const initialToken = await jwt.sign({ _id: newUser._id }, jwt_secret, { expiresIn: '24h' })
                     const url = "http://localhost:3000/confirm/" + initialToken;
+                    console.log(`La direccion es: ${url}`);
                     await transporter.sendMail({
                         from: "lara.sanchez.michael.dev@gmail.com",
                         to: newUser.email,
@@ -27,12 +30,14 @@ const userController = {
                                             <p>Para finalizar registro <a href=${url}>haz click aquí</a> UwU</p>
                                         `
                     })
+                    console.log(`Se manda el mail`);
                 }
                 res.status(201).send({ message: `Se ha creado el usuario ${req.body.username}`, newUser });
             } else {
                 res.status(400).send(`Tu correo: ${req.body.email} no tiene un formato valido.`)
             }
         } catch (error) {
+            console.log(error);
             error.origin = "user";
             next(error);
         }
