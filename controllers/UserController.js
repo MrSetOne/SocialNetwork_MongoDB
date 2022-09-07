@@ -41,8 +41,12 @@ const userController = {
     },
     async verify(req, res) {
         try {
-            const payload = jwt.verify(req.params.authorization, jwt_secret);
+            console.log('entra');
+            const payload = jwt.verify(req.params.authorization, JWT_SECRET);
+            console.log('se genera payload');
             const user = await User.findOne({ _id: payload._id });
+            console.log('se genera user');
+            console.log(user);
             if (!user) {
                 res.status(400).send('El usuario no existe')
             } else {
@@ -90,7 +94,7 @@ const userController = {
             if (!loggedUser.confirmed) {
                 return res.status(200).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
             };
-            const token = jwt.sign({ id: loggedUser._id }, jwt_secret);
+            const token = jwt.sign({ id: loggedUser._id }, JWT_SECRET);
             if (loggedUser.tokens.length > 4) {
                 loggedUser.tokens.shift();
             }

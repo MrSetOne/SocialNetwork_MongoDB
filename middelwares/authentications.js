@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require("dotenv").config();
-const jwt_secret = process.env.JWT_SECRET
+const JWT_SECRET = process.env.JWT_SECRET
 const User = require('../models/User');
 const Post = require('../models/Post');
 const Comment = require('../models/Comment')
@@ -8,7 +8,7 @@ const Comment = require('../models/Comment')
 const authentication = async(req, res, next) => {
     try {
         const token = req.headers.authorization;
-        const payload = await jwt.verify(token, jwt_secret);
+        const payload = await jwt.verify(token, JWT_SECRET);
         const userFound = await User.findOne({
             _id: payload.id,
             tokens: token
