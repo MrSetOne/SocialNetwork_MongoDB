@@ -1,7 +1,7 @@
 const bcrypt = require('bcryptjs');
 const { all } = require('express/lib/application');
 const jwt = require('jsonwebtoken');
-const { JWT_SECRET, HEROKU_HOST } = process.env
+const { JWT_SECRET, FRONTEND_URL } = process.env
 const transporter = require('../config/nodemailer');
 const User = require('../models/User');
 
@@ -16,12 +16,9 @@ const userController = {
                 req.body.firstVisit = true;
                 req.body.password = await bcrypt.hash(req.body.password, 10)
                 const newUser = await User.create({...req.body })
-                console.log(newUser);
                 if (newUser) {
-                    console.log('Se trata de enviar el mail');
                     const initialToken = await jwt.sign({ _id: newUser._id }, JWT_SECRET, { expiresIn: '24h' })
-                    const url = `${HEROKU_HOST}/users/confirm/${initialToken}`;
-                    console.log(`La direccion es: ${url}`);
+                    const url = `${FRONTEND_URL}confirm/${initialToken}`;
                     await transporter.sendMail({
                         from: "lara.sanchez.michael.dev@gmail.com",
                         to: newUser.email,
