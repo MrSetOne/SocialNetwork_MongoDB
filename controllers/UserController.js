@@ -86,7 +86,7 @@ const userController = {
                 res.status(404).send('Email o contraseña incorrectos');
             };
             if (!loggedUser.confirmed) {
-                return res.status(200).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
+                return res.status(403).send(`El correo ${req.body.email} no ha sido verificado, comprueba la bandeja de entrada.`)
             };
             const token = jwt.sign({ id: loggedUser._id }, JWT_SECRET);
             if (loggedUser.tokens.length > 4) {
