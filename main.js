@@ -7,19 +7,19 @@ const { TypeError } = require("./middelwares/errors");
 const cors = require('cors');
 
 
-const corsOptions = {
-  origin: FRONTEND_URL,
-  optionsSuccessStatus: 200,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-}
+// const corsOptions = {
+//   origin: FRONTEND_URL,
+//   optionsSuccessStatus: 200,
+//   methods: ['GET', 'POST', 'PUT', 'DELETE'],
+//   allowedHeaders: ['Content-Type', 'Authorization']
+// }
 
 // console.log(corsOptions);
 app.use(cors());
 
 app.use(express.json())
 dbConnection()
-app.use(cors({origin: FRONTEND_URL, optionsSuccessStatus: 200}))
+// app.use(cors({origin: FRONTEND_URL, optionsSuccessStatus: 200}))
 
 app.use(express.static("./assets"))
 
