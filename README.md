@@ -26,7 +26,7 @@
 
     * Seleccion de DB 
 
-    * Problemas varios con email de confirmacion 
+    * Problemas varios con email de confirmacion
 
 * En el tintero
 
