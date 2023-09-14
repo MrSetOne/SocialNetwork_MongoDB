@@ -6,6 +6,15 @@ const { dbConnection } = require("./config/config");
 const { TypeError } = require("./middelwares/errors");
 const cors = require('cors');
 
+
+const corsOptions = {
+  origin: FRONTEND_URL,
+  optionsSuccessStatus: 200,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}
+app.use(cors(corsOptions));
+
 app.use(express.json())
 dbConnection()
 app.use(cors({origin: FRONTEND_URL, optionsSuccessStatus: 200}))
