@@ -1,14 +1,14 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const { PORT } = process.env;
+const { PORT, FRONTEND_URL } = process.env;
 const { dbConnection } = require("./config/config");
 const { TypeError } = require("./middelwares/errors");
 const cors = require('cors');
 
 app.use(express.json())
 dbConnection()
-app.use(cors())
+app.use(cors({origin: FRONTEND_URL, optionsSuccessStatus: 200}))
 
 app.use(express.static("./assets"))
 
